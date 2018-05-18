@@ -1,0 +1,43 @@
+* {
+  font-family: sans-serif;
+}
+
+#training-box {
+  display: block;
+  width: 70%;
+  height: 200px;
+  margin: 0 auto;
+  resize: none;
+  border-radius: 6px;
+  border: none;
+  box-shadow: 0px 5px 20px 10px #75757524;
+  padding: 10px;
+  font-size: 1.1em;
+  transition: 300ms;
+}
+
+#training-box:focus {
+  outline: none;
+  box-shadow: 0px 1px 10px 2px #3a39393d;
+}
+
+#train-btn {
+  display: block;
+  margin: 20px auto;
+  height: 40px;
+  width: 120px;
+  background-color: #6496b3;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+}
+
+#train-btn:hover {
+  cursor: pointer;
+  background-color: #4d7a94;
+}
+
+#train-btn:focus {
+  outline: none;
+}
