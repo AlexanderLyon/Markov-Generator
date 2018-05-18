@@ -33,5 +33,31 @@ function train(text) {
     }
   }
 
+  for (let words in wordList){
+    wordList[words] = sortByOccurrence(wordList[words]);
+  }
+
   console.table(wordList);
+}
+
+
+function sortByOccurrence(word) {
+  const count = {};
+  let sortedList = [];
+
+  // Count occurrence of each word:
+  for (let i=0; i<word.length; i++) {
+    if (word[i] in count) {
+      count[word[i]]++;
+    } else {
+      count[word[i]] = 1;
+    }
+  }
+
+  // Sort:
+  sortedList = Object.keys(count).sort( (a, b) => {
+    return count[b] - count[a];
+  });
+
+  return sortedList;
 }
