@@ -71,8 +71,6 @@ textarea:focus  {
 }
 
 #gen-controls {
-  display: block;
-  margin: 0 auto;
   text-align: center;
 }
 #generateBtn, #maximum { display: inline-block; }
