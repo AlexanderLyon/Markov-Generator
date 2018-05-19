@@ -1,16 +1,16 @@
-const wordList = {};
+let wordList = {};
 const userInputBox = document.getElementById('user-input');
-const demos = document.getElementsByClassName('demo');
+const textGenerateBox = document.getElementById('text-generation');
+const demos = document.getElementById('demos');
 const suggestionButtons = document.getElementsByClassName('suggestion');
 
 
 //===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
-  const text = document.getElementById('training-box').value;
+  const text = document.getElementById('training-box').value.trim();
   train(text);
-  for(let i=0; i<demos.length; i++){
-    demos[i].style.display = 'block';
-  }
+  demos.style.display = 'block';
+
 });
 
 userInputBox.addEventListener('keyup', (e) => {
@@ -21,19 +21,29 @@ userInputBox.addEventListener('keyup', (e) => {
 
 for(let i=0; i<suggestionButtons.length; i++){
   suggestionButtons[i].addEventListener('click', (e) => {
-    const existingText = userInputBox.value;
-    userInputBox.value = existingText + e.target.innerText + " ";
-    userInputKeyUp();
+    if (e.target.innerText.trim() != "") {
+      const existingText = userInputBox.value;
+      userInputBox.value = existingText + e.target.innerText + " ";
+      userInputKeyUp();
+    }
   });
 }
+
+document.getElementById('generateBtn').addEventListener('click', (e) => {
+  const max = document.getElementById('maximum').value;
+  textGenerateBox.innerText = generateParagraph(max);
+});
 
 
 
 //===== Functions ===================================
 function train(text) {
+  // Reset wordList:
+  wordList = {};
+
   // Read and tokenize input
-  text = text.replace(/[\s\s,\t \n,]+/g, " ");
-  let tokens = text.toLowerCase().split(" ");
+  text = cleanText(text);
+  let tokens = text.split(" ");
   for(let i=0; i<tokens.length; i++){
     const thisWord = tokens[i];
 
@@ -58,6 +68,50 @@ function train(text) {
   }
 
   //console.table(wordList);
+}
+
+
+function generateParagraph(limit) {
+  const words = Object.keys(wordList);
+  const start = Math.floor(Math.random() * (words.length));
+  let iterator = 0;
+  let paragraph = words[start];
+  let nextWord = getNextWords(paragraph)[0];
+  paragraph = paragraph.charAt(0).toUpperCase() + paragraph.slice(1);
+
+  while (nextWord && iterator < limit) {
+    paragraph += " " + nextWord;
+    let nextIndex;
+    const possibleNextWords = getNextWords(nextWord);
+
+    if (isRepeating(paragraph)) {
+      // The dialog seems to be looping, randomize the next word:
+      nextIndex = Math.floor( Math.random() * (possibleNextWords.length) );
+    }
+    else {
+      // Use the next logical word:
+      nextIndex = 0;
+    }
+
+    nextWord = possibleNextWords[nextIndex];
+    iterator++;
+  }
+
+  return paragraph;
+}
+
+
+function isRepeating(text) {
+  const tokens = text.split(" ");
+  let repeats = false;
+
+  if (tokens.length > 10) {
+    let phrase = tokens.slice(Math.max(tokens.length - 3, 1)).join(" ");
+    let lastTenWords = tokens.slice(Math.max(tokens.length - 25, 1)).splice(0, 22).join(" ");
+    repeats = (lastTenWords.search(phrase) == -1) ? false : true;
+  }
+
+  return repeats;
 }
 
 
@@ -91,21 +145,36 @@ function userInputKeyUp() {
     }
   }
 
-  let lastWord = words[words.length-1];
+  const lastWord = words[words.length-1];
+  const nextWords = getNextWords(lastWord);
 
-  if (lastWord in wordList) {
-    for(let i=0; i<3; i++){
-      if(wordList[lastWord][i] !== undefined){
-        suggestionButtons[i].innerText = wordList[lastWord][i];
-      }
-      else {
-        suggestionButtons[i].innerText = "";
-      }
+  for(let i=0; i<3; i++) {
+    if (nextWords[i]) {
+      suggestionButtons[i].innerText = nextWords[i];
+    }
+    else {
+      suggestionButtons[i].innerText = "";
     }
   }
-  else {
-    suggestionButtons[0].innerText = "";
-    suggestionButtons[1].innerText = "";
-    suggestionButtons[2].innerText = "";
+}
+
+
+function getNextWords(current) {
+  /* Returns an array of possible next words */
+  let nextWords =[];
+
+  if (current in wordList) {
+    for(let i=0; i<wordList[current].length; i++){
+      nextWords.push( wordList[current][i] );
+    }
   }
+
+  return nextWords;
+}
+
+
+function cleanText(text) {
+  /* Removes characters that will interfere with regexs, and converts to lowercase */
+  text = text.replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*]/g, "").toLowerCase();
+  return text;
 }

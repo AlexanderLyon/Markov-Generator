@@ -9,19 +9,29 @@
   <section>
     <h1>Training</h1>
     <textarea id="training-box" placeholder="Enter sample text"></textarea>
-    <button id="train-btn">Train</button>
+    <button class="btn" id="train-btn">Train</button>
   </section>
 
-  <hr>
 
-  <section class="demo">
+  <section id="demos">
+    <hr>
+
     <h1>Autocomplete Demo</h1>
     <div id="suggestions-wrapper">
-      <div class="suggestion" id="suggestion-1"></div>
-      <div class="suggestion" id="suggestion-2"></div>
-      <div class="suggestion" id="suggestion-3"></div>
+      <button class="suggestion" id="suggestion-1"></button>
+      <button class="suggestion" id="suggestion-2"></button>
+      <button class="suggestion" id="suggestion-3"></button>
     </div>
     <textarea id="user-input" placeholder="Start typing..."></textarea>
+
+    <hr>
+
+    <h1>Text Generation Demo</h1>
+    <div id="gen-controls">
+      <button class="btn" id="generateBtn">Generate Text</button>
+      <input id="maximum" type="number"/>
+    </div>
+    <textarea id="text-generation" disabled placeholder="Click generate"></textarea>
   </section>
 
 

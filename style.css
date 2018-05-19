@@ -10,7 +10,29 @@ h1 {
 section {
   margin-bottom: 60px;
 }
-.demo { display: none; }
+button:focus {
+  outline: none;
+}
+.btn {
+  display: block;
+  margin: 20px auto;
+  height: 40px;
+  width: auto;
+  min-width: 120px;
+  background-color: #6496b3;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  font-size: 1.2em;
+}
+.btn:focus {
+  outline: none;
+}
+.btn:hover, .suggestion:hover {
+  cursor: pointer;
+  background-color: #4d7a94;
+}
+#demos { display: none; }
 
 textarea {
   display: block;
@@ -31,27 +53,6 @@ textarea:focus  {
   box-shadow: 0px 1px 10px 2px #3a39393d;
 }
 
-#train-btn {
-  display: block;
-  margin: 20px auto;
-  height: 40px;
-  width: 120px;
-  background-color: #6496b3;
-  border-radius: 6px;
-  border: none;
-  color: white;
-  font-size: 1.2em;
-}
-
-#train-btn:hover, .suggestion:hover {
-  cursor: pointer;
-  background-color: #4d7a94;
-}
-
-#train-btn:focus {
-  outline: none;
-}
-
 #suggestions-wrapper {
   text-align: center;
   margin-bottom: 10px;
@@ -67,4 +68,16 @@ textarea:focus  {
   border-radius: 5px;
   background-color: #6496b3;
   color: white;
+}
+
+#gen-controls {
+  display: block;
+  margin: 0 auto;
+  text-align: center;
+}
+#generateBtn, #maximum { display: inline-block; }
+#maximum {
+  height: 33px;
+  width: 100px;
+  font-size: 1.1em;
 }
