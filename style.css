@@ -1,8 +1,18 @@
 * {
-  font-family: sans-serif;
+  font-family: "Roboto", sans-serif;
 }
+h1 {
+  text-align: center;
+  color: #4d7a94;
+  font-size: 1.9em;
+  font-weight: 300;
+}
+section {
+  margin-bottom: 60px;
+}
+.demo { display: none; }
 
-#training-box {
+textarea {
   display: block;
   width: 70%;
   height: 200px;
@@ -16,7 +26,7 @@
   transition: 300ms;
 }
 
-#training-box:focus {
+textarea:focus  {
   outline: none;
   box-shadow: 0px 1px 10px 2px #3a39393d;
 }
@@ -33,11 +43,28 @@
   font-size: 1.2em;
 }
 
-#train-btn:hover {
+#train-btn:hover, .suggestion:hover {
   cursor: pointer;
   background-color: #4d7a94;
 }
 
 #train-btn:focus {
   outline: none;
+}
+
+#suggestions-wrapper {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.suggestion {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 33px;
+  height: 33px;
+  width: 130px;
+  font-size: 1.1em;
+  text-overflow: ellipsis;
+  border-radius: 5px;
+  background-color: #6496b3;
+  color: white;
 }

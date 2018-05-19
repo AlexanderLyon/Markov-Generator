@@ -1,18 +1,38 @@
 const wordList = {};
+const userInputBox = document.getElementById('user-input');
+const demos = document.getElementsByClassName('demo');
+const suggestionButtons = document.getElementsByClassName('suggestion');
 
 
 //===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
   const text = document.getElementById('training-box').value;
   train(text);
+  for(let i=0; i<demos.length; i++){
+    demos[i].style.display = 'block';
+  }
 });
 
+userInputBox.addEventListener('keyup', (e) => {
+  if (event.keyCode === 32 ) {
+    userInputKeyUp();
+  }
+});
+
+for(let i=0; i<suggestionButtons.length; i++){
+  suggestionButtons[i].addEventListener('click', (e) => {
+    const existingText = userInputBox.value;
+    userInputBox.value = existingText + e.target.innerText + " ";
+    userInputKeyUp();
+  });
+}
 
 
 
 //===== Functions ===================================
 function train(text) {
   // Read and tokenize input
+  text = text.replace(/[\s\s,\t \n,]+/g, " ");
   let tokens = text.toLowerCase().split(" ");
   for(let i=0; i<tokens.length; i++){
     const thisWord = tokens[i];
@@ -37,7 +57,7 @@ function train(text) {
     wordList[words] = sortByOccurrence(wordList[words]);
   }
 
-  console.table(wordList);
+  //console.table(wordList);
 }
 
 
@@ -60,4 +80,32 @@ function sortByOccurrence(word) {
   });
 
   return sortedList;
+}
+
+
+function userInputKeyUp() {
+  let words = userInputBox.value.split(" ");
+  for(let i=0; i<words.length; i++){
+    if (words[i] === "") {
+      words.splice(i, 1);
+    }
+  }
+
+  let lastWord = words[words.length-1];
+
+  if (lastWord in wordList) {
+    for(let i=0; i<3; i++){
+      if(wordList[lastWord][i] !== undefined){
+        suggestionButtons[i].innerText = wordList[lastWord][i];
+      }
+      else {
+        suggestionButtons[i].innerText = "";
+      }
+    }
+  }
+  else {
+    suggestionButtons[0].innerText = "";
+    suggestionButtons[1].innerText = "";
+    suggestionButtons[2].innerText = "";
+  }
 }

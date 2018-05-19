@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Markov Text Generator</title>
+  <link rel="stylesheet" href="style.css" type="text/css"/>
+</head>
+<body>
+
+  <section>
+    <h1>Training</h1>
+    <textarea id="training-box" placeholder="Enter sample text"></textarea>
+    <button id="train-btn">Train</button>
+  </section>
+
+  <hr>
+
+  <section class="demo">
+    <h1>Autocomplete Demo</h1>
+    <div id="suggestions-wrapper">
+      <div class="suggestion" id="suggestion-1"></div>
+      <div class="suggestion" id="suggestion-2"></div>
+      <div class="suggestion" id="suggestion-3"></div>
+    </div>
+    <textarea id="user-input" placeholder="Start typing..."></textarea>
+  </section>
+
+
+  <script src="main.js" type="text/javascript"/></script>
+</body>
+</html>
