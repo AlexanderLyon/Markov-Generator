@@ -125,6 +125,11 @@ function userInputKeyUp() {
 }
 
 
+function getLastWord(text) {
+  const tokens = text.split(" ");
+  return tokens[tokens.length-1];
+}
+
 
 function getNextWords(current) {
   /* Returns an array of possible next words */
@@ -140,9 +145,22 @@ function getNextWords(current) {
 }
 
 
+function predictPath( text ) {
+  let possibilities = {};
+  possibilities.one = getNextWords(text);
+  if (possibilities.one.length > 0) {
+    possibilities.two = getNextWords(possibilities.one[0]);
+    if (possibilities.two.length > 0) {
+      possibilities.three = getNextWords(possibilities.two[0]);
+    }
+  }
+
+  return possibilities;
+}
+
 
 function cleanText(text) {
   /* Removes characters that will interfere with regexs, and converts to lowercase */
-  text = text.replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*]/g, "").toLowerCase();
+  text = text.replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*]/g, "").toLowerCase().trim();
   return text;
 }

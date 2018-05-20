@@ -1,8 +1,17 @@
 let wordList = {};
+const keyupEvent = new Event('keyup');
 const userInputBox = document.getElementById('user-input');
 const textGenerateBox = document.getElementById('text-generation');
 const demos = document.getElementById('demos');
 const suggestionButtons = document.getElementsByClassName('suggestion');
+const predictionInput = document.getElementById('prediction-input');
+const predictCol1 = document.querySelector('#column-1 ul');
+const columnOneLi = document.querySelectorAll('#column-1 li');
+const predictCol2 = document.querySelector('#column-2 ul');
+const columnTwoLi = document.querySelectorAll('#column-2 li');
+const predictCol3 = document.querySelector('#column-3 ul');
+const columnThreeLi = document.querySelectorAll('#column-3 li');
+const treeWordsNext = document.querySelectorAll('#column-1 li');
 
 
 //===== Event Handlers ===================================
@@ -14,7 +23,7 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
 
 
 userInputBox.addEventListener('keyup', (e) => {
-  if (event.keyCode === 32 ) {
+  if (event.keyCode === 32) {
     userInputKeyUp();
   }
 });
@@ -35,3 +44,72 @@ document.getElementById('generateBtn').addEventListener('click', (e) => {
   const max = document.getElementById('maximum').value;
   textGenerateBox.innerText = generateParagraph(max);
 });
+
+
+predictionInput.addEventListener('keyup', (e) => {
+  if( e.target.value == ""){
+    predictCol1.style.display = "none";
+    predictCol2.style.display = "none";
+    predictCol3.style.display = "none";
+  }
+  else if (getLastWord(cleanText(e.target.value)) in wordList) {
+    const path = predictPath( getLastWord(cleanText(e.target.value)) );
+    if (path.one) {
+      predictCol1.style.display = "inline-block";
+      columnOneLi.forEach( (el, index) => {
+        if (path.one[index]) {
+          el.style.display = "block";
+          el.innerText = path.one[index];
+        }
+        else {
+          el.style.display = "none";
+          el.innerText = "";
+        }
+      });
+    }
+    else {
+      predictCol1.style.display = "none";
+    }
+    if (path.two) {
+      predictCol2.style.display = "inline-block";
+      columnTwoLi.forEach( (el, index) => {
+        if (path.two[index]) {
+          el.style.display = "block";
+          el.innerText = path.two[index];
+        }
+        else {
+          el.style.display = "none";
+          el.innerText = "";
+        }
+      });
+    }
+    else {
+      predictCol2.style.display = "none";
+    }
+    if (path.three) {
+      predictCol3.style.display = "inline-block";
+      columnThreeLi.forEach( (el, index) => {
+        if (path.three[index]) {
+          el.style.display = "block";
+          el.innerText = path.three[index];
+        }
+        else {
+          el.style.display = "none";
+          el.innerText = "";
+        }
+      });
+    }
+    else {
+      predictCol3.style.display = "none";
+    }
+  }
+});
+
+for(let i=0; i<treeWordsNext.length; i++){
+  treeWordsNext[i].addEventListener('click', (e) => {
+    const word = e.target.innerText;
+    const firstChar = predictionInput.value[predictionInput.value.length-1] == " " ? "" : " ";
+    predictionInput.value = predictionInput.value + firstChar + word + " ";
+    predictionInput.dispatchEvent(keyupEvent);
+  });
+}
