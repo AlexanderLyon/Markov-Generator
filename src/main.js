@@ -1,4 +1,4 @@
-let wordList = {};
+let vocabulary;
 const keyupEvent = new Event('keyup');
 const userInputBox = document.getElementById('user-input');
 const textGenerateBox = document.getElementById('text-generation');
@@ -13,12 +13,23 @@ const predictCol3 = document.querySelector('#column-3 ul');
 const columnThreeLi = document.querySelectorAll('#column-3 li');
 const treeWordsNext = document.querySelectorAll('#column-1 li');
 
+// Create new vocabulary or restore from previous data
+if (localStorage.getItem('savedVocabulary') != null) {
+  vocabulary = JSON.parse( localStorage.getItem('savedVocabulary') );
+  demos.style.display = 'block';
+} else {
+  vocabulary = {};
+  demos.style.display = 'none';
+}
 
 //===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
   const text = document.getElementById('training-box').value.trim();
   train(text);
   demos.style.display = 'block';
+  if (document.getElementById('saveVocab').checked) {
+    saveVocabulary(vocabulary);
+  }
 });
 
 
@@ -52,7 +63,7 @@ predictionInput.addEventListener('keyup', (e) => {
     predictCol2.style.display = "none";
     predictCol3.style.display = "none";
   }
-  else if (getLastWord(cleanText(e.target.value)) in wordList) {
+  else if (getLastWord(cleanText(e.target.value)) in vocabulary) {
     const path = predictPath( getLastWord(cleanText(e.target.value)) );
     if (path.one) {
       predictCol1.style.display = "inline-block";

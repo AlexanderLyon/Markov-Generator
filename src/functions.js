@@ -1,68 +1,75 @@
 
-function train(text) {
-  // Reset wordList:
-  wordList = {};
-
-  // Read and tokenize input
-  text = cleanText(text);
-  let tokens = text.split(" ");
-  for(let i=0; i<tokens.length; i++){
-    const thisWord = tokens[i];
-
-    if (thisWord in wordList) {
-      // Word is already in wordList, only add its next word:
-      if (i+1 < tokens.length) {
-        const nextWord = tokens[i+1];
-        wordList[thisWord].push(nextWord);
-      }
-    }
-    else {
-      // Not yet in wordList, add it & its next word:
-      wordList[thisWord] = [];
-      if (i+1 < tokens.length){
-        wordList[thisWord].push(tokens[i+1]);
-      }
-    }
-  }
-
-  for (let words in wordList){
-    wordList[words] = sortByOccurrence(wordList[words]);
-  }
-
-  //console.table(wordList);
+function saveVocabulary(vocabulary) {
+  localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
 }
 
 
+function train(text) {
+  let tokens = cleanText(text).split(" ");
+
+  for(let i=0; i<tokens.length; i++){
+    const thisWord = tokens[i];
+
+    if (thisWord in vocabulary) {
+      // Word is already in vocabulary, only add its next word:
+      if (i+1 < tokens.length) {
+        const nextWord = tokens[i+1];
+        vocabulary[thisWord].push(nextWord);
+      }
+    }
+    else {
+      // Not yet in vocabulary, add it & its next word:
+      vocabulary[thisWord] = [];
+      if (i+1 < tokens.length){
+        vocabulary[thisWord].push(tokens[i+1]);
+      }
+    }
+  }
+
+  for (let words in vocabulary){
+    vocabulary[words] = sortByOccurrence(vocabulary[words]);
+  }
+
+  //console.table(vocabulary);
+}
+
 
 function generateParagraph(limit) {
-  const words = Object.keys(wordList);
+  const words = Object.keys(vocabulary);
   const start = Math.floor(Math.random() * (words.length));
   let iterator = 0;
   let paragraph = words[start];
-  let nextWord = getNextWords(paragraph)[0];
+  let nextWord = vocabulary[paragraph][0];
   paragraph = paragraph.charAt(0).toUpperCase() + paragraph.slice(1);
+  let capitalize = (nextWord.substring(nextWord.length-1) == '.') ? true : false;
 
   while (nextWord && iterator < limit) {
+    if (capitalize) {
+      // Capitalize first letter of new sentence
+      nextWord = nextWord.charAt(0).toUpperCase() + nextWord.slice(1);
+      capitalize = false;
+    }
     paragraph += " " + nextWord;
     let nextIndex;
-    const possibleNextWords = getNextWords(nextWord);
+    const possibleNextWords = vocabulary[nextWord];
 
-    if (isRepeating(paragraph)) {
+    if (isRepeating(paragraph) && possibleNextWords.length > 1) {
       // The dialog seems to be looping, randomize the next word:
       nextIndex = Math.floor( Math.random() * (possibleNextWords.length) );
+      //nextIndex = 1;
     }
     else {
       // Use the next logical word:
       nextIndex = 0;
     }
 
+    capitalize = (nextWord.substring(nextWord.length-1) == '.') ? true : false;
     nextWord = possibleNextWords[nextIndex];
     iterator++;
   }
 
   return paragraph;
 }
-
 
 
 function isRepeating(text) {
@@ -73,11 +80,13 @@ function isRepeating(text) {
     let phrase = tokens.slice(Math.max(tokens.length - 3, 1)).join(" ");
     let lastTenWords = tokens.slice(Math.max(tokens.length - 25, 1)).splice(0, 22).join(" ");
     repeats = (lastTenWords.search(phrase) == -1) ? false : true;
+    if (repeats) {
+      console.log("Repeating phrase '" + phrase + "'");
+    }
   }
 
   return repeats;
 }
-
 
 
 function sortByOccurrence(word) {
@@ -102,7 +111,6 @@ function sortByOccurrence(word) {
 }
 
 
-
 function userInputKeyUp() {
   let words = userInputBox.value.split(" ");
   for(let i=0; i<words.length; i++){
@@ -112,7 +120,7 @@ function userInputKeyUp() {
   }
 
   const lastWord = words[words.length-1];
-  const nextWords = getNextWords(lastWord);
+  const nextWords = vocabulary[lastWord];
 
   for(let i=0; i<3; i++) {
     if (nextWords[i]) {
@@ -131,27 +139,13 @@ function getLastWord(text) {
 }
 
 
-function getNextWords(current) {
-  /* Returns an array of possible next words */
-  let nextWords =[];
-
-  if (current in wordList) {
-    for(let i=0; i<wordList[current].length; i++){
-      nextWords.push( wordList[current][i] );
-    }
-  }
-
-  return nextWords;
-}
-
-
 function predictPath( text ) {
   let possibilities = {};
-  possibilities.one = getNextWords(text);
+  possibilities.one = vocabulary[text];
   if (possibilities.one.length > 0) {
-    possibilities.two = getNextWords(possibilities.one[0]);
+    possibilities.two = vocabulary[possibilities.one[0]];
     if (possibilities.two.length > 0) {
-      possibilities.three = getNextWords(possibilities.two[0]);
+      possibilities.three = vocabulary[possibilities.two[0]];
     }
   }
 

@@ -53,6 +53,11 @@ textarea:focus, #prediction-input:focus  {
   box-shadow: 0px 1px 10px 2px #3a39393d;
 }
 
+#memory-choice {
+  margin: 0px auto 15px auto;
+  text-align: center;
+}
+
 #suggestions-wrapper {
   text-align: center;
   margin-bottom: 10px;
