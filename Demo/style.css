@@ -84,6 +84,9 @@ textarea:focus, #prediction-input:focus  {
   width: 100px;
   font-size: 1.1em;
 }
+#speak-text {
+  display: none;
+}
 
 
 #prediction-input {

@@ -1,3 +1,13 @@
+let vocabulary;
+
+// Create new vocabulary or restore from previous data
+if (localStorage.getItem('savedVocabulary') != null) {
+  vocabulary = JSON.parse( localStorage.getItem('savedVocabulary') );
+  demos.style.display = 'block';
+} else {
+  vocabulary = {};
+  demos.style.display = 'none';
+}
 
 function saveVocabulary(vocabulary) {
   localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
@@ -37,11 +47,11 @@ function train(text) {
 function generateParagraph(limit) {
   const words = Object.keys(vocabulary);
   const start = Math.floor(Math.random() * (words.length));
-  let iterator = 0;
   let paragraph = words[start];
   let nextWord = vocabulary[paragraph][0];
   paragraph = paragraph.charAt(0).toUpperCase() + paragraph.slice(1);
   let capitalize = (nextWord.substring(nextWord.length-1) == '.') ? true : false;
+  let iterator = 0;
 
   while (nextWord && iterator < limit) {
     if (capitalize) {
@@ -53,18 +63,16 @@ function generateParagraph(limit) {
     let nextIndex;
     const possibleNextWords = vocabulary[nextWord];
 
-    if (isRepeating(paragraph) && possibleNextWords.length > 1) {
-      // The dialog seems to be looping, randomize the next word:
+    if (typeof possibleNextWords != 'undefined' && possibleNextWords.length > 0) {
       nextIndex = Math.floor( Math.random() * (possibleNextWords.length) );
-      //nextIndex = 1;
+      nextWord = possibleNextWords[nextIndex];
     }
     else {
-      // Use the next logical word:
-      nextIndex = 0;
+      // No words available, randomize next word:
+      nextWord = words[ Math.floor(Math.random() * (words.length)) ];
     }
 
     capitalize = (nextWord.substring(nextWord.length-1) == '.') ? true : false;
-    nextWord = possibleNextWords[nextIndex];
     iterator++;
   }
 
@@ -111,28 +119,6 @@ function sortByOccurrence(word) {
 }
 
 
-function userInputKeyUp() {
-  let words = userInputBox.value.split(" ");
-  for(let i=0; i<words.length; i++){
-    if (words[i] === "") {
-      words.splice(i, 1);
-    }
-  }
-
-  const lastWord = words[words.length-1];
-  const nextWords = vocabulary[lastWord];
-
-  for(let i=0; i<3; i++) {
-    if (nextWords[i]) {
-      suggestionButtons[i].innerText = nextWords[i];
-    }
-    else {
-      suggestionButtons[i].innerText = "";
-    }
-  }
-}
-
-
 function getLastWord(text) {
   const tokens = text.split(" ");
   return tokens[tokens.length-1];
@@ -150,6 +136,20 @@ function predictPath( text ) {
   }
 
   return possibilities;
+}
+
+
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance();
+    const voices = window.speechSynthesis.getVoices();
+    utterance.voice = voices[1];
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.text = text;
+
+    speechSynthesis.speak(utterance);
+  }
 }
 
 

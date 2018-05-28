@@ -1,4 +1,4 @@
-let vocabulary;
+
 const keyupEvent = new Event('keyup');
 const userInputBox = document.getElementById('user-input');
 const textGenerateBox = document.getElementById('text-generation');
@@ -13,14 +13,6 @@ const predictCol3 = document.querySelector('#column-3 ul');
 const columnThreeLi = document.querySelectorAll('#column-3 li');
 const treeWordsNext = document.querySelectorAll('#column-1 li');
 
-// Create new vocabulary or restore from previous data
-if (localStorage.getItem('savedVocabulary') != null) {
-  vocabulary = JSON.parse( localStorage.getItem('savedVocabulary') );
-  demos.style.display = 'block';
-} else {
-  vocabulary = {};
-  demos.style.display = 'none';
-}
 
 //===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
@@ -54,6 +46,13 @@ for(let i=0; i<suggestionButtons.length; i++){
 document.getElementById('generateBtn').addEventListener('click', (e) => {
   const max = document.getElementById('maximum').value;
   textGenerateBox.innerText = generateParagraph(max);
+  if (textGenerateBox.value.length > 0) {
+    document.getElementById('speak-text').style.display = "inline-block";
+  }
+});
+
+document.getElementById('speak-text').addEventListener('click', (e) => {
+  speakText(textGenerateBox.value);
 });
 
 
@@ -123,4 +122,25 @@ for(let i=0; i<treeWordsNext.length; i++){
     predictionInput.value = predictionInput.value + firstChar + word + " ";
     predictionInput.dispatchEvent(keyupEvent);
   });
+}
+
+function userInputKeyUp() {
+  let words = userInputBox.value.split(" ");
+  for(let i=0; i<words.length; i++){
+    if (words[i] === "") {
+      words.splice(i, 1);
+    }
+  }
+
+  const lastWord = words[words.length-1];
+  const nextWords = vocabulary[lastWord];
+
+  for(let i=0; i<3; i++) {
+    if (nextWords[i]) {
+      suggestionButtons[i].innerText = nextWords[i];
+    }
+    else {
+      suggestionButtons[i].innerText = "";
+    }
+  }
 }
