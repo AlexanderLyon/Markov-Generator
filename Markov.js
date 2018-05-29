@@ -9,6 +9,7 @@ if (localStorage.getItem('savedVocabulary') != null) {
   demos.style.display = 'none';
 }
 
+
 function saveVocabulary(vocabulary) {
   localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
 }
@@ -50,18 +51,21 @@ function generateParagraph(limit) {
   let paragraph = words[start];
   let nextWord = vocabulary[paragraph][0];
   paragraph = paragraph.charAt(0).toUpperCase() + paragraph.slice(1);
-  let capitalize = (nextWord.substring(nextWord.length-1) == '.') ? true : false;
+  let capitalize = (nextWord.substring(nextWord.length-1).match(/[\.]|[\?]|[!]]/)) ? true : false;
   let iterator = 0;
 
   while (nextWord && iterator < limit) {
+    let thisWord = nextWord;
+
     if (capitalize) {
       // Capitalize first letter of new sentence
-      nextWord = nextWord.charAt(0).toUpperCase() + nextWord.slice(1);
+      thisWord = thisWord.charAt(0).toUpperCase() + thisWord.slice(1);
       capitalize = false;
     }
-    paragraph += " " + nextWord;
+    paragraph += " " + thisWord;
+
     let nextIndex;
-    const possibleNextWords = vocabulary[nextWord];
+    const possibleNextWords = vocabulary[thisWord];
 
     if (typeof possibleNextWords != 'undefined' && possibleNextWords.length > 0) {
       nextIndex = Math.floor( Math.random() * (possibleNextWords.length) );
@@ -72,7 +76,7 @@ function generateParagraph(limit) {
       nextWord = words[ Math.floor(Math.random() * (words.length)) ];
     }
 
-    capitalize = (nextWord.substring(nextWord.length-1) == '.') ? true : false;
+    capitalize = (thisWord.substring(nextWord.length-1).match(/[\.]|[\?]|[!]]/)) ? true : false;
     iterator++;
   }
 
