@@ -77,9 +77,6 @@ function generateParagraph(limit) {
     }
 
     capitalize = (thisWord.search(/(\.|\?|!)/g) != -1) ? true : false;
-    if (capitalize) {
-      console.log("Punctuation detected in word " + thisWord);
-    }
     iterator++;
   }
 
@@ -149,13 +146,23 @@ function predictPath( text ) {
 function speakText(text) {
   if ('speechSynthesis' in window) {
     const utterance = new SpeechSynthesisUtterance();
-    const voices = window.speechSynthesis.getVoices();
-    utterance.voice = voices[1];
-    utterance.rate = 1;
-    utterance.pitch = 1;
-    utterance.text = text;
 
-    speechSynthesis.speak(utterance);
+    //Load voices before proceeding:
+    const loadingVoices = setInterval( () => {
+      const voices = window.speechSynthesis.getVoices();
+
+      if (voices.length > 0) {
+        utterance.voice = voices[10];
+        utterance.lang = 'en-US';
+        utterance.rate = 0.8;
+        utterance.pitch = 1;
+        utterance.text = text;
+
+        speechSynthesis.speak(utterance);
+        clearInterval(loadingVoices);
+      }
+    }, 500);
+
   }
 }
 
