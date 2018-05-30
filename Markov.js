@@ -51,7 +51,7 @@ function generateParagraph(limit) {
   let paragraph = words[start];
   let nextWord = vocabulary[paragraph][0];
   paragraph = paragraph.charAt(0).toUpperCase() + paragraph.slice(1);
-  let capitalize = (nextWord.substring(nextWord.length-1).match(/[\.]|[\?]|[!]]/)) ? true : false;
+  let capitalize = (paragraph.search(/(\.|\?|!)/g) != -1) ? true : false;
   let iterator = 0;
 
   while (nextWord && iterator < limit) {
@@ -76,7 +76,10 @@ function generateParagraph(limit) {
       nextWord = words[ Math.floor(Math.random() * (words.length)) ];
     }
 
-    capitalize = (thisWord.substring(nextWord.length-1).match(/[\.]|[\?]|[!]]/)) ? true : false;
+    capitalize = (thisWord.search(/(\.|\?|!)/g) != -1) ? true : false;
+    if (capitalize) {
+      console.log("Punctuation detected in word " + thisWord);
+    }
     iterator++;
   }
 
