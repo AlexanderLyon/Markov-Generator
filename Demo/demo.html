@@ -16,6 +16,10 @@
     </div>
     <textarea id="training-box" placeholder="Enter sample text"></textarea>
     <button class="btn" id="train-btn">Train</button>
+    <div id="wiki-controls">
+      <button class="btn" id="wiki-btn">Fetch Text from Wikipedia</button>
+      <input class="maximum wiki-max" type="number" value="100" placeholder="Limit"/>
+    </div>
   </section>
 
 
@@ -39,7 +43,7 @@
       <div id="gen-controls">
         <button id="speak-text" class="btn">Speak</button>
         <button class="btn" id="generateBtn">Generate Text</button>
-        <input id="maximum" type="number" value="100" placeholder="Limit"/>
+        <input class="maximum gen-max" type="number" value="100" placeholder="Limit"/>
       </div>
       <textarea id="text-generation" disabled placeholder="Click the 'Generate Text' button above"></textarea>
     </section>

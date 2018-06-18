@@ -75,11 +75,11 @@ textarea:focus, #prediction-input:focus  {
   color: white;
 }
 
-#gen-controls {
+#gen-controls, #wiki-controls {
   text-align: center;
 }
-#generateBtn, #maximum { display: inline-block; }
-#maximum {
+#generateBtn, #wiki-btn, .maximum { display: inline-block; }
+.maximum {
   height: 33px;
   width: 100px;
   font-size: 1.1em;

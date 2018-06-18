@@ -25,6 +25,21 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
 });
 
 
+document.getElementById('wiki-btn').addEventListener('click', (e) => {
+  const limit = document.querySelector('.wiki-max').value;
+  for (let i=0; i<limit; i++) {
+    getWikiText().then((response) => {
+      train(response);
+    });
+  }
+
+  //console.log("Training complete \nRead " + limit + " entries.");
+  if (document.getElementById('saveVocab').checked) {
+    saveVocabulary(vocabulary);
+  }
+});
+
+
 userInputBox.addEventListener('keyup', (e) => {
   if (event.keyCode === 32) {
     userInputKeyUp();
@@ -44,7 +59,7 @@ for(let i=0; i<suggestionButtons.length; i++){
 
 
 document.getElementById('generateBtn').addEventListener('click', (e) => {
-  const max = document.getElementById('maximum').value;
+  const max = document.querySelector('.gen-max').value;
   textGenerateBox.innerText = generateParagraph(max);
   if (textGenerateBox.value.length > 0) {
     document.getElementById('speak-text').style.display = "inline-block";

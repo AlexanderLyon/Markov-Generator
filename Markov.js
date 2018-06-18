@@ -45,6 +45,25 @@ function train(text) {
 }
 
 
+async function getWikiText() {
+  return new Promise((resolve, reject) => {
+    fetch("https://cors-anywhere.herokuapp.com/"
+      + "http://en.wikipedia.org/w/api.php?"
+      + "action=query&generator=random&prop=extracts&exchars=500&format=json")
+    .then(response => response.json())
+    .then((wikiData) => {
+      let wikiText = wikiData["query"]["pages"][Object.keys(wikiData["query"]["pages"])[0]]["extract"];
+      wikiText = cleanText(wikiText.substring(0, wikiText.length - 3));
+      resolve(wikiText);
+    })
+    .catch((err) => {
+      console.error("Unable to fetch text from Wikipedia", err);
+    })
+
+  });
+}
+
+
 function generateParagraph(limit) {
   const words = Object.keys(vocabulary);
   const start = Math.floor(Math.random() * (words.length));
@@ -168,7 +187,6 @@ function speakText(text) {
 
 
 function cleanText(text) {
-  /* Removes characters that will interfere with regexs, and converts to lowercase */
-  text = text.replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*]/g, "").toLowerCase().trim();
-  return text;
+  /* Removes HTML tags and other characters that will interfere with regexs */
+  return text.replace(/(<([^>]+)>)/ig,"").replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*\_*]/g, "").trim();
 }
