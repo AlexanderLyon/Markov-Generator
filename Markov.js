@@ -1,47 +1,60 @@
 let vocabulary;
+loadVocabulary();
 
-// Create new vocabulary or restore from previous data
-if (localStorage.getItem('savedVocabulary') != null) {
-  vocabulary = JSON.parse( localStorage.getItem('savedVocabulary') );
-  demos.style.display = 'block';
-} else {
-  vocabulary = {};
-  demos.style.display = 'none';
+function loadVocabulary() {
+  if (true) {
+    // Create new vocabulary or restore from previous data
+    if (localStorage.getItem('savedVocabulary') != null) {
+      vocabulary = JSON.parse( localStorage.getItem('savedVocabulary') );
+      demos.style.display = 'block';
+    } else {
+      vocabulary = {};
+      demos.style.display = 'none';
+    }
+  }
+  else {
+    // v2 -- Retreive vocabulary from API
+  }
 }
 
 
 function saveVocabulary(vocabulary) {
   localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
+
+  // Also send to database:
+
 }
 
 
 function train(text) {
-  let tokens = cleanText(text).split(" ");
+  return new Promise((resolve, reject) => {
+    let tokens = cleanText(text).split(" ");
 
-  for(let i=0; i<tokens.length; i++){
-    const thisWord = tokens[i];
+    for(let i=0; i<tokens.length; i++){
+      const thisWord = tokens[i];
 
-    if (thisWord in vocabulary) {
-      // Word is already in vocabulary, only add its next word:
-      if (i+1 < tokens.length) {
-        const nextWord = tokens[i+1];
-        vocabulary[thisWord].push(nextWord);
+      if (thisWord in vocabulary) {
+        // Word is already in vocabulary, only add its next word:
+        if (i+1 < tokens.length) {
+          const nextWord = tokens[i+1];
+          vocabulary[thisWord].push(nextWord);
+        }
+      }
+      else {
+        // Not yet in vocabulary, add it & its next word:
+        vocabulary[thisWord] = [];
+        if (i+1 < tokens.length){
+          vocabulary[thisWord].push(tokens[i+1]);
+        }
       }
     }
-    else {
-      // Not yet in vocabulary, add it & its next word:
-      vocabulary[thisWord] = [];
-      if (i+1 < tokens.length){
-        vocabulary[thisWord].push(tokens[i+1]);
-      }
+
+    for (let words in vocabulary){
+      vocabulary[words] = sortByOccurrence(vocabulary[words]);
     }
-  }
 
-  for (let words in vocabulary){
-    vocabulary[words] = sortByOccurrence(vocabulary[words]);
-  }
-
-  //console.table(vocabulary);
+    resolve();
+  });
 }
 
 

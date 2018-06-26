@@ -16,8 +16,15 @@ const treeWordsNext = document.querySelectorAll('#column-1 li');
 
 //===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
+  document.getElementById('train-btn').innerText = "Training...";
   const text = document.getElementById('training-box').value.trim();
-  train(text);
+  train(text).then(()=>{
+    console.log("Training complete");
+    document.getElementById('train-btn').innerText = "Training Complete!";
+    setTimeout(() => {
+      document.getElementById('train-btn').innerText = "Train";
+    }, 5000);
+  });
   demos.style.display = 'block';
   if (document.getElementById('saveVocab').checked) {
     saveVocabulary(vocabulary);
@@ -29,7 +36,7 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
   const limit = document.querySelector('.wiki-max').value;
   for (let i=0; i<limit; i++) {
     getWikiText().then((response) => {
-      train(response);
+      return train(response);
     });
   }
 
