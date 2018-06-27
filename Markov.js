@@ -14,15 +14,32 @@ function loadVocabulary() {
   }
   else {
     // v2 -- Retreive vocabulary from API
+    fetch('http://ai.alexlyon.me/utilities/getVocabulary.php')
+    .then((response) => {
+      console.log(response);
+    })
+    .catch(() => {
+      console.error("Unable to fetch vocabulary");
+    });
   }
 }
 
 
 function saveVocabulary(vocabulary) {
-  localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
+  //localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
 
-  // Also send to database:
-
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'http://ai.alexlyon.me/utilities/saveVocabulary.php');
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        console.log("Saved?");
+        resolve();
+      }
+    };
+    xhr.send(vocabulary);
+  });
 }
 
 

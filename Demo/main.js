@@ -42,7 +42,9 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
 
   //console.log("Training complete \nRead " + limit + " entries.");
   if (document.getElementById('saveVocab').checked) {
-    saveVocabulary(vocabulary);
+    saveVocabulary(vocabulary).then(() => {
+      console.log("Promise completed");
+    });
   }
 });
 
