@@ -2,43 +2,43 @@ let vocabulary;
 loadVocabulary();
 
 function loadVocabulary() {
-  if (true) {
-    // Create new vocabulary or restore from previous data
-    if (localStorage.getItem('savedVocabulary') != null) {
-      vocabulary = JSON.parse( localStorage.getItem('savedVocabulary') );
+  document.getElementById('loading-data').style.display = 'block';
+  fetch('../utilities/getVocabulary.php')
+  .then(response => response.json())
+  .then((data) => {
+    if (data) {
+      vocabulary = data;
       demos.style.display = 'block';
-    } else {
+      document.getElementById('loading-data').style.display = 'none';
+      console.log("Vocabulary loaded");
+    }
+    else {
       vocabulary = {};
+      document.getElementById('loading-data').style.display = 'none';
       demos.style.display = 'none';
     }
-  }
-  else {
-    // v2 -- Retreive vocabulary from API
-    fetch('http://ai.alexlyon.me/utilities/getVocabulary.php')
-    .then((response) => {
-      console.log(response);
-    })
-    .catch(() => {
-      console.error("Unable to fetch vocabulary");
-    });
-  }
+  })
+  .catch((err) => {
+    console.warn("Unable to fetch vocabulary. The JSON file is most likely empty. \nCreating a new vocabulary object...");
+    vocabulary = {};
+    document.getElementById('loading-data').style.display = 'none';
+    demos.style.display = 'none';
+  });
 }
 
 
 function saveVocabulary(vocabulary) {
-  //localStorage.setItem('savedVocabulary', JSON.stringify(vocabulary));
-
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    xhr.open('POST', 'http://ai.alexlyon.me/utilities/saveVocabulary.php');
+    xhr.open('POST', '../utilities/saveVocabulary.php');
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onload = () => {
       if (xhr.status === 200) {
-        console.log("Saved?");
+        console.log("Saved!");
         resolve();
       }
     };
-    xhr.send(vocabulary);
+    xhr.send("data=" + JSON.stringify(vocabulary));
   });
 }
 

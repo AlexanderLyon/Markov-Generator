@@ -34,6 +34,32 @@ button:focus {
 }
 #demos { display: none; }
 
+#loading-data {
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 10px;
+  height: 35px;
+  width: 160px;
+  border-radius: 50px;
+  padding: 5px;
+  background-color: #f1f191e8;
+  border: 1px solid #e0e019;
+}
+#loading-data svg {
+  display: inline-block;
+  height: 35px;
+  width: 35px;
+}
+#loading-data p {
+  display: inline-block;
+  position: absolute;
+  top: 2px;
+  left: 50px;
+  color: #8a8807;
+  font-size: 0.8em;
+}
+
 textarea {
   display: block;
   width: 70%;

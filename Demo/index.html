@@ -8,11 +8,32 @@
 </head>
 <body>
 
+  <div id="loading-data">
+    <svg width="200px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-rolling" style="background: none;">
+      <circle
+        cx="50"
+        cy="50"
+        fill="none"
+        ng-attr-stroke="{{config.color}}"
+        ng-attr-stroke-width="{{config.width}}"
+        ng-attr-r="{{config.radius}}"
+        ng-attr-stroke-dasharray="{{config.dasharray}}"
+        stroke="#8a8807"
+        stroke-width="5"
+        r="30"
+        stroke-dasharray="141.37166941154067 49.12388980384689"
+        transform="rotate(30 50 50)">
+        <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="0.8s" begin="0s" repeatCount="indefinite"></animateTransform>
+      </circle>
+    </svg>
+    <p>Loading Data...</p>
+  </div>
+
   <section>
     <h1>Training</h1>
     <div id="memory-choice">
       <input type="checkbox" checked id="saveVocab"/>
-      <label for="saveVocab">Save to local vocabulary</label>
+      <label for="saveVocab">Save to vocabulary</label>
     </div>
     <textarea id="training-box" placeholder="Enter sample text"></textarea>
     <button class="btn" id="train-btn">Train</button>

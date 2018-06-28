@@ -18,35 +18,56 @@ const treeWordsNext = document.querySelectorAll('#column-1 li');
 document.getElementById('train-btn').addEventListener('click', (e) => {
   document.getElementById('train-btn').innerText = "Training...";
   const text = document.getElementById('training-box').value.trim();
-  train(text).then(()=>{
+  train(text).then(() => {
     console.log("Training complete");
     document.getElementById('train-btn').innerText = "Training Complete!";
+
+    if (document.getElementById('saveVocab').checked) {
+      saveVocabulary(vocabulary);
+    }
+
     setTimeout(() => {
       document.getElementById('train-btn').innerText = "Train";
     }, 5000);
   });
   demos.style.display = 'block';
-  if (document.getElementById('saveVocab').checked) {
-    saveVocabulary(vocabulary);
-  }
 });
 
 
 document.getElementById('wiki-btn').addEventListener('click', (e) => {
   const limit = document.querySelector('.wiki-max').value;
-  for (let i=0; i<limit; i++) {
-    getWikiText().then((response) => {
-      return train(response);
-    });
-  }
+  document.getElementById('wiki-btn').innerText = "Fetching...";
 
-  //console.log("Training complete \nRead " + limit + " entries.");
-  if (document.getElementById('saveVocab').checked) {
-    saveVocabulary(vocabulary).then(() => {
-      console.log("Promise completed");
+  readWikipedia(limit)
+  .then(() => {
+    if (document.getElementById('saveVocab').checked) {
+      return saveVocabulary(vocabulary);
+    }
+  })
+  .then( () => {
+    console.log("Training complete \nRead " + limit + " entries.");
+    demos.style.display = 'block';
+    document.getElementById('wiki-btn').innerText = "Fetch Text from Wikipedia";
+  });
+
+});
+
+
+async function readWikipedia(limit) {
+  for (let i=0; i<limit; i++) {
+    await new Promise(resolve => {
+      getWikiText()
+      .then((response) => {
+        train(response);
+      })
+      .then(() => {
+        const progress = Math.floor(((i+1) / limit) * 100) + "%";
+        document.getElementById('wiki-btn').innerText = "Fetching... (" + progress + ")";
+        resolve();
+      });
     });
   }
-});
+}
 
 
 userInputBox.addEventListener('keyup', (e) => {
