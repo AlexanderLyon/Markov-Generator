@@ -36,19 +36,23 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
 document.getElementById('wiki-btn').addEventListener('click', (e) => {
   const wikiBtn = document.getElementById('wiki-btn');
   const limit = document.querySelector('.wiki-max').value;
-  wikiBtn.innerText = "Fetching...";
-  wikiBtn.classList.add('btn-loading');
 
-  readWikipedia(limit)
-  .then(() => {
-    return saveVocabulary(vocabulary);
-  })
-  .then( () => {
-    console.log("Training complete \nRead " + limit + " entries.");
-    wikiBtn.classList.remove('btn-loading');
-    wikiBtn.innerText = "Fetch Text from Wikipedia";
-    refreshButtons();
-  });
+  if(!wikiBtn.classList.contains('btn-loading')) {
+    wikiBtn.innerText = "Fetching...";
+    wikiBtn.classList.add('btn-loading');
+
+    readWikipedia(limit)
+    .then(() => {
+      return saveVocabulary(vocabulary);
+    })
+    .then( () => {
+      console.log("Training complete \nRead " + limit + " entries.");
+      wikiBtn.classList.remove('btn-loading');
+      wikiBtn.innerText = "Fetch Text from Wikipedia";
+      refreshButtons();
+    });
+  }
+
 
 });
 
@@ -231,7 +235,6 @@ function userInputKeyUp() {
 }
 
 function refreshButtons() {
-  console.log("refreshing...")
   const buttons = document.querySelectorAll('nav button:not(.current)');
 
   if (!vocabulary || Object.keys(vocabulary).length === 0) {

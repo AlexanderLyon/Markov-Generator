@@ -8,7 +8,6 @@ function loadVocabulary() {
   .then((data) => {
     if (data) {
       vocabulary = data;
-      demos.style.display = 'block';
       document.getElementById('loading-data').style.display = 'none';
       console.log("Vocabulary loaded");
       refreshButtons();
@@ -16,7 +15,6 @@ function loadVocabulary() {
     else {
       vocabulary = {};
       document.getElementById('loading-data').style.display = 'none';
-      demos.style.display = 'none';
       refreshButtons();
     }
   })
