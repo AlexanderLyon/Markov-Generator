@@ -11,18 +11,20 @@ function loadVocabulary() {
       demos.style.display = 'block';
       document.getElementById('loading-data').style.display = 'none';
       console.log("Vocabulary loaded");
+      refreshButtons();
     }
     else {
       vocabulary = {};
       document.getElementById('loading-data').style.display = 'none';
       demos.style.display = 'none';
+      refreshButtons();
     }
   })
   .catch((err) => {
     console.warn("Unable to fetch vocabulary. The JSON file is most likely empty. \nCreating a new vocabulary object...");
     vocabulary = {};
     document.getElementById('loading-data').style.display = 'none';
-    demos.style.display = 'none';
+    refreshButtons();
   });
 }
 

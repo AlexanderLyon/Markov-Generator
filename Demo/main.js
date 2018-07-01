@@ -22,32 +22,32 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
     console.log("Training complete");
     document.getElementById('train-btn').innerText = "Training Complete!";
 
-    if (document.getElementById('saveVocab').checked) {
-      saveVocabulary(vocabulary);
-    }
+    saveVocabulary(vocabulary);
 
     setTimeout(() => {
       document.getElementById('train-btn').innerText = "Train";
     }, 5000);
   });
   demos.style.display = 'block';
+  refreshButtons();
 });
 
 
 document.getElementById('wiki-btn').addEventListener('click', (e) => {
+  const wikiBtn = document.getElementById('wiki-btn');
   const limit = document.querySelector('.wiki-max').value;
-  document.getElementById('wiki-btn').innerText = "Fetching...";
+  wikiBtn.innerText = "Fetching...";
+  wikiBtn.classList.add('btn-loading');
 
   readWikipedia(limit)
   .then(() => {
-    if (document.getElementById('saveVocab').checked) {
-      return saveVocabulary(vocabulary);
-    }
+    return saveVocabulary(vocabulary);
   })
   .then( () => {
     console.log("Training complete \nRead " + limit + " entries.");
-    demos.style.display = 'block';
-    document.getElementById('wiki-btn').innerText = "Fetch Text from Wikipedia";
+    wikiBtn.classList.remove('btn-loading');
+    wikiBtn.innerText = "Fetch Text from Wikipedia";
+    refreshButtons();
   });
 
 });
@@ -75,6 +75,46 @@ userInputBox.addEventListener('keyup', (e) => {
     userInputKeyUp();
   }
 });
+
+
+for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
+  const thisBtn = document.getElementsByClassName("nav-btn")[i];
+
+  thisBtn.addEventListener('click', (e) => {
+    if (!thisBtn.classList.contains('current')) {
+      document.querySelector('.current').classList.remove('current');
+      thisBtn.classList.add('current');
+
+      switch (e.currentTarget.getAttribute("id")) {
+        case "training-btn":
+          document.querySelector('#section-training').style.display = "block";
+          document.querySelector('#section-autocomplete').style.display = "none";
+          document.querySelector('#section-textgen').style.display = "none";
+          document.querySelector('#section-dialogtree').style.display = "none";
+          break;
+        case "autocomplete-btn":
+          document.querySelector('#section-training').style.display = "none";
+          document.querySelector('#section-autocomplete').style.display = "block";
+          document.querySelector('#section-textgen').style.display = "none";
+          document.querySelector('#section-dialogtree').style.display = "none";
+          break;
+        case "textgen-btn":
+          document.querySelector('#section-training').style.display = "none";
+          document.querySelector('#section-autocomplete').style.display = "none";
+          document.querySelector('#section-textgen').style.display = "block";
+          document.querySelector('#section-dialogtree').style.display = "none";
+          break;
+        case "dialogtree-btn":
+          document.querySelector('#section-training').style.display = "none";
+          document.querySelector('#section-autocomplete').style.display = "none";
+          document.querySelector('#section-textgen').style.display = "none";
+          document.querySelector('#section-dialogtree').style.display = "block";
+          break;
+      }
+    }
+
+  })
+}
 
 
 for(let i=0; i<suggestionButtons.length; i++){
@@ -186,6 +226,22 @@ function userInputKeyUp() {
     }
     else {
       suggestionButtons[i].innerText = "";
+    }
+  }
+}
+
+function refreshButtons() {
+  console.log("refreshing...")
+  const buttons = document.querySelectorAll('nav button:not(.current)');
+
+  if (!vocabulary || Object.keys(vocabulary).length === 0) {
+    for (let i=0; i<buttons.length; i++) {
+      buttons[i].classList.add('unavailable');
+    }
+  }
+  else {
+    for (let i=0; i<buttons.length; i++) {
+      buttons[i].classList.remove('unavailable');
     }
   }
 }

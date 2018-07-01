@@ -8,46 +8,48 @@
 </head>
 <body>
 
-  <div id="loading-data">
-    <svg width="200px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-rolling" style="background: none;">
-      <circle
-        cx="50"
-        cy="50"
-        fill="none"
-        ng-attr-stroke="{{config.color}}"
-        ng-attr-stroke-width="{{config.width}}"
-        ng-attr-r="{{config.radius}}"
-        ng-attr-stroke-dasharray="{{config.dasharray}}"
-        stroke="#8a8807"
-        stroke-width="5"
-        r="30"
-        stroke-dasharray="141.37166941154067 49.12388980384689"
-        transform="rotate(30 50 50)">
-        <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="0.8s" begin="0s" repeatCount="indefinite"></animateTransform>
-      </circle>
-    </svg>
-    <p>Loading Data...</p>
-  </div>
+  <nav>
+    <button id="training-btn" class="nav-btn current">Training</button>
+    <button id="autocomplete-btn" class="nav-btn">Autocomplete Demo</button>
+    <button id="textgen-btn" class="nav-btn">Text Generation</button>
+    <button id="dialogtree-btn" class="nav-btn">Dialog Tree</button>
+  </nav>
 
-  <section>
-    <h1>Training</h1>
-    <div id="memory-choice">
-      <input type="checkbox" checked id="saveVocab"/>
-      <label for="saveVocab">Save to vocabulary</label>
+  <main>
+
+    <div id="loading-data">
+      <svg width="200px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-rolling" style="background: none;">
+        <circle
+          cx="50"
+          cy="50"
+          fill="none"
+          ng-attr-stroke="{{config.color}}"
+          ng-attr-stroke-width="{{config.width}}"
+          ng-attr-r="{{config.radius}}"
+          ng-attr-stroke-dasharray="{{config.dasharray}}"
+          stroke="#8a8807"
+          stroke-width="5"
+          r="30"
+          stroke-dasharray="141.37166941154067 49.12388980384689"
+          transform="rotate(30 50 50)">
+          <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="0.8s" begin="0s" repeatCount="indefinite"></animateTransform>
+        </circle>
+      </svg>
+      <p>Loading Data...</p>
     </div>
-    <textarea id="training-box" placeholder="Enter sample text"></textarea>
-    <button class="btn" id="train-btn">Train</button>
-    <div id="wiki-controls">
-      <button class="btn" id="wiki-btn">Fetch Text from Wikipedia</button>
-      <input class="maximum wiki-max" type="number" value="100" placeholder="Limit"/>
-    </div>
-  </section>
+
+    <section id="section-training">
+      <h1>Training</h1>
+      <textarea id="training-box" placeholder="Enter sample text"></textarea>
+      <button class="btn" id="train-btn">Train</button>
+      <div id="wiki-controls">
+        <button class="btn" id="wiki-btn">Fetch Text from Wikipedia</button>
+        <input class="maximum wiki-max" type="number" value="100" placeholder="Limit"/>
+      </div>
+    </section>
 
 
-  <section id="demos">
-    <hr>
-
-    <section>
+    <section id="section-autocomplete">
       <h1>Autocomplete Demo</h1>
       <div id="suggestions-wrapper">
         <button class="suggestion" id="suggestion-1"></button>
@@ -57,9 +59,8 @@
       <textarea id="user-input" placeholder="Start typing..."></textarea>
     </section>
 
-    <hr>
 
-    <section>
+    <section id="section-textgen">
       <h1>Text Generation Demo</h1>
       <div id="gen-controls">
         <button id="speak-text" class="btn">Speak</button>
@@ -69,7 +70,8 @@
       <textarea id="text-generation" disabled placeholder="Click the 'Generate Text' button above"></textarea>
     </section>
 
-    <section>
+
+    <section id="section-dialogtree">
       <h1>Dialog Tree Demo</h1>
       <input type="text" id="prediction-input" placeholder="Start typing a sentence..."/>
       <div id="dialog-tree">
@@ -106,10 +108,10 @@
       </div>
     </section>
 
-  </section>
+  </main>
 
 
-  <script src="../Markov.js" type="text/javascript"></script>
   <script src="main.js" type="text/javascript"/></script>
+  <script src="../Markov.js" type="text/javascript"></script>
 </body>
 </html>
