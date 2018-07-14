@@ -53,7 +53,6 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
     });
   }
 
-
 });
 
 
@@ -85,6 +84,10 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
   const thisBtn = document.getElementsByClassName("nav-btn")[i];
 
   thisBtn.addEventListener('click', (e) => {
+    if (document.getElementById('mobile-menu-btn').classList.contains('open')) {
+      closeMenu();
+    }
+
     if (!thisBtn.classList.contains('current')) {
       document.querySelector('.current').classList.remove('current');
       thisBtn.classList.add('current');
@@ -119,6 +122,18 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
 
   })
 }
+
+
+document.getElementById('mobile-menu-btn').addEventListener('click', (e) => {
+  const buttons = document.querySelectorAll('nav button');
+
+  if (e.currentTarget.classList.contains('open')) {
+    closeMenu();
+  }
+  else {
+    openMenu();
+  }
+});
 
 
 for(let i=0; i<suggestionButtons.length; i++){
@@ -247,4 +262,25 @@ function refreshButtons() {
       buttons[i].classList.remove('unavailable');
     }
   }
+}
+
+function openMenu() {
+  const buttons = document.querySelectorAll('nav button');
+
+  for (let i=0; i<buttons.length; i++) {
+    let float = (100 * (i+1)) + 'px';
+    buttons[i].style.display = 'block';
+    buttons[i].style.bottom = float;
+  }
+  document.getElementById('mobile-menu-btn').classList.add('open');
+
+}
+
+function closeMenu() {
+  const buttons = document.querySelectorAll('nav button');
+
+  for (let i=0; i<buttons.length; i++) {
+    buttons[i].style.bottom = "10px";
+  }
+  document.getElementById('mobile-menu-btn').classList.remove('open');
 }

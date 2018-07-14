@@ -52,6 +52,7 @@ nav {
   width: 14%;
   height: 100vh;
 }
+#mobile-menu-btn { display: none; }
 nav button {
   width: 100%;
   height: 100px;
@@ -210,6 +211,53 @@ textarea:focus, #prediction-input:focus  {
 }
 #column-2 { opacity: 0.4; }
 #column-3 { opacity: 0.1; }
+
+
+@media(max-width: 660px) {
+  main { width: 100%; }
+  nav {
+    position: absolute;
+    right: 20px;
+    bottom: 0px;
+    width: auto;
+    border: none;
+    z-index: 999;
+  }
+  nav button, #mobile-menu-btn {
+    display: block;
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    text-align: center;
+    color: white;
+    line-height: 68px;
+    font-weight: bold;
+    font-size: 0.7em;
+    height: 68px;
+    width: 68px;
+    border: none;
+    border-radius: 50px;
+    background-color: #5177c6;
+    transition: 0.3s;
+  }
+  nav button {
+  }
+  #mobile-menu-btn {
+    display: block;
+    position: fixed;
+    bottom: 10px;
+    right: 20px;
+    z-index: 9999;
+  }
+  #mobile-menu-btn:hover {
+    cursor: pointer;
+    background-color: #415296;
+  }
+
+  textarea { width: 85%; }
+}
 
 @media (max-width: 372px) {
   #column-1, #column-2, #column-3 {
