@@ -3,12 +3,12 @@
 }
 body {
   margin: 0px;
-  background: #303142;
+  background: #4a505f;
 }
 label { color: white; }
 h1 {
   text-align: center;
-  color: #5178c5;
+  color: #FFFFFF;
   font-size: 1.9em;
   font-weight: 300;
 }
@@ -48,23 +48,26 @@ nav {
   position: fixed;
   top: 0px;
   float: left;
-  border: 1px solid black;
-  width: 14%;
+  background-color: #323746;
+  width: 200px;
   height: 100vh;
+  z-index: 900;
 }
 #mobile-menu-btn { display: none; }
 nav button {
   width: 100%;
-  height: 100px;
+  height: 80px;
+  padding: 5px 5px 5px 15px;
+  text-align: left;
   color: black;
   cursor: pointer;
   color: white;
+  border: none;
   background-color: transparent;
-  border: 1px solid black;
   font-size: 0.8em;
 }
 nav button:hover:not(.unavailable), .current {
-  background-color: #5c5e6d;
+  background: linear-gradient(to right, #696b79, #4a505f);
 }
 .unavailable {
   opacity: 0.5;
@@ -118,7 +121,7 @@ textarea {
   border-radius: 6px;
   border: none;
   color: white;
-  background-color: #474d5a;
+  background-color: #323746;
   box-sizing: border-box;
   padding: 10px;
   font-size: 1.1em;
@@ -170,7 +173,7 @@ textarea:focus, #prediction-input:focus  {
   border-radius: 6px;
   border: none;
   color: white;
-  background-color: #474d5a;
+  background-color: #323746;
   box-sizing: border-box;
   padding: 10px;
   font-size: 1.1em;
@@ -232,7 +235,7 @@ textarea:focus, #prediction-input:focus  {
     margin-bottom: 25px;
     text-align: center;
     color: white;
-    line-height: 68px;
+    line-height: 16px;
     font-weight: bold;
     font-size: 0.7em;
     height: 68px;
@@ -243,6 +246,8 @@ textarea:focus, #prediction-input:focus  {
     transition: 0.3s;
   }
   nav button {
+    text-align: center;
+    padding: 0px;
   }
   #mobile-menu-btn {
     display: block;

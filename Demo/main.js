@@ -88,7 +88,7 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
       closeMenu();
     }
 
-    if (!thisBtn.classList.contains('current')) {
+    if (!thisBtn.classList.contains('current') && !thisBtn.classList.contains('unavailable')) {
       document.querySelector('.current').classList.remove('current');
       thisBtn.classList.add('current');
 
@@ -148,7 +148,7 @@ for(let i=0; i<suggestionButtons.length; i++){
 
 
 document.getElementById('generateBtn').addEventListener('click', (e) => {
-  const max = document.querySelector('.gen-max').value;
+  const max = document.querySelector('.gen-max').value - 1;
   textGenerateBox.innerText = generateParagraph(max);
   if (textGenerateBox.value.length > 0) {
     document.getElementById('speak-text').style.display = "inline-block";
