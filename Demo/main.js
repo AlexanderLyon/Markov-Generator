@@ -2,7 +2,6 @@
 const keyupEvent = new Event('keyup');
 const userInputBox = document.getElementById('user-input');
 const textGenerateBox = document.getElementById('text-generation');
-const demos = document.getElementById('demos');
 const suggestionButtons = document.getElementsByClassName('suggestion');
 const predictionInput = document.getElementById('prediction-input');
 const predictCol1 = document.querySelector('#column-1 ul');
@@ -28,7 +27,6 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
       document.getElementById('train-btn').innerText = "Train";
     }, 5000);
   });
-  demos.style.display = 'block';
   refreshButtons();
 });
 
@@ -74,9 +72,7 @@ async function readWikipedia(limit) {
 
 
 userInputBox.addEventListener('keyup', (e) => {
-  if (event.keyCode === 32) {
-    userInputKeyUp();
-  }
+  userInputKeyUp();
 });
 
 
@@ -140,7 +136,14 @@ for(let i=0; i<suggestionButtons.length; i++){
   suggestionButtons[i].addEventListener('click', (e) => {
     if (e.target.innerText.trim() != "") {
       const existingText = userInputBox.value;
-      userInputBox.value = existingText + e.target.innerText + " ";
+      let newText;
+      if (existingText[existingText.length-1] !== " ") {
+        newText = existingText + " " + e.target.innerText + " ";
+      }
+      else {
+        newText = existingText + e.target.innerText + " ";
+      }
+      userInputBox.value = newText;
       userInputKeyUp();
     }
   });
@@ -228,6 +231,7 @@ for(let i=0; i<treeWordsNext.length; i++){
   });
 }
 
+
 function userInputKeyUp() {
   let words = userInputBox.value.split(" ");
   for(let i=0; i<words.length; i++){
@@ -240,7 +244,7 @@ function userInputKeyUp() {
   const nextWords = vocabulary[lastWord];
 
   for(let i=0; i<3; i++) {
-    if (nextWords[i]) {
+    if (nextWords && nextWords[i]) {
       suggestionButtons[i].innerText = nextWords[i];
     }
     else {
@@ -248,6 +252,7 @@ function userInputKeyUp() {
     }
   }
 }
+
 
 function refreshButtons() {
   const buttons = document.querySelectorAll('nav button:not(.current)');
@@ -264,6 +269,7 @@ function refreshButtons() {
   }
 }
 
+
 function openMenu() {
   const buttons = document.querySelectorAll('nav button');
 
@@ -275,6 +281,7 @@ function openMenu() {
   document.getElementById('mobile-menu-btn').classList.add('open');
 
 }
+
 
 function closeMenu() {
   const buttons = document.querySelectorAll('nav button');

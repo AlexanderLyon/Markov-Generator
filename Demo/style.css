@@ -77,7 +77,29 @@ nav button:hover:not(.unavailable), .current {
 main {
   float: right;
   position: relative;
-  width: 85%;
+  width: calc(100% - 200px);
+}
+
+
+textarea {
+  display: block;
+  width: 70%;
+  height: 200px;
+  margin: 0 auto;
+  resize: none;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  background-color: #323746;
+  box-sizing: border-box;
+  padding: 10px;
+  font-size: 1.1em;
+  transition: 300ms;
+}
+
+textarea:focus, #prediction-input:focus  {
+  outline: none;
+  border: 1px solid #5178c5;
 }
 
 #section-autocomplete, #section-textgen, #section-dialogtree {
@@ -86,6 +108,9 @@ main {
 
 #demos { display: none; }
 
+
+
+/******** Loading ********/
 #loading-data {
   display: none;
   position: fixed;
@@ -112,27 +137,26 @@ main {
   font-size: 0.8em;
 }
 
-textarea {
-  display: block;
-  width: 70%;
-  height: 200px;
-  margin: 0 auto;
-  resize: none;
-  border-radius: 6px;
-  border: none;
-  color: white;
-  background-color: #323746;
-  box-sizing: border-box;
-  padding: 10px;
-  font-size: 1.1em;
-  transition: 300ms;
+
+
+/******** Training ********/
+#training-controls {
+  text-align: center;
+}
+#gen-controls, #wiki-controls {
+  text-align: center;
+}
+#wiki-btn, .maximum {
+  display: inline-block;
 }
 
-textarea:focus, #prediction-input:focus  {
-  outline: none;
-  border: 1px solid #5178c5;
+#train-btn, #wiki-controls {
+  display: inline-block;
 }
 
+
+
+/******** Autocomplete ********/
 #suggestions-wrapper {
   text-align: center;
   margin-bottom: 10px;
@@ -151,10 +175,10 @@ textarea:focus, #prediction-input:focus  {
   color: white;
 }
 
-#gen-controls, #wiki-controls {
-  text-align: center;
-}
-#generateBtn, #wiki-btn, .maximum { display: inline-block; }
+
+
+/******** Text Generation ********/
+#generateBtn { display: inline-block; }
 .maximum {
   height: 33px;
   width: 100px;
@@ -165,6 +189,8 @@ textarea:focus, #prediction-input:focus  {
 }
 
 
+
+/******** Prediction ********/
 #prediction-input {
   display: block;
   margin:0 auto;
@@ -214,6 +240,9 @@ textarea:focus, #prediction-input:focus  {
 }
 #column-2 { opacity: 0.4; }
 #column-3 { opacity: 0.1; }
+
+
+
 
 
 @media(max-width: 660px) {
