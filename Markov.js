@@ -77,6 +77,31 @@ function train(text) {
 
 async function getWikiText() {
   return new Promise((resolve, reject) => {
+    const randomURL = 'http://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
+
+    // Get random article title:
+    fetch(randomURL).then(response => { return response.json(); })
+    .then(data => {
+      let pageID = Object.keys(data["query"]["pages"])[0];
+      let title = data["query"]["pages"][pageID]["title"].replace(/\s+/g, "_");
+
+      // Now fetch its text contents:
+      const contentURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&format=json&titles=';
+      fetch(contentURL + title)
+      .then(response => { return response.json(); })
+      .then( pageData => {
+        let page = Object.keys(pageData['query']['pages'])[0];
+        let text = pageData['query']['pages'][page]['extract'];
+        resolve(text);
+      });
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+
+
+  return new Promise((resolve, reject) => {
     fetch("https://cors-anywhere.herokuapp.com/"
       + "http://en.wikipedia.org/w/api.php?"
       + "action=query&generator=random&prop=extracts&exchars=500&format=json")
