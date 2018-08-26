@@ -77,13 +77,14 @@ function train(text) {
 
 async function getWikiText() {
   return new Promise((resolve, reject) => {
-    const randomURL = 'http://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
 
     // Get random article title:
+    const randomURL = 'http://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
     fetch(randomURL).then(response => { return response.json(); })
     .then(data => {
       let pageID = Object.keys(data["query"]["pages"])[0];
       let title = data["query"]["pages"][pageID]["title"].replace(/\s+/g, "_");
+      console.log("Reading article: '" + data["query"]["pages"][pageID]["title"] + "'");
 
       // Now fetch its text contents:
       const contentURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&format=json&titles=';
@@ -92,28 +93,14 @@ async function getWikiText() {
       .then( pageData => {
         let page = Object.keys(pageData['query']['pages'])[0];
         let text = pageData['query']['pages'][page]['extract'];
-        resolve(text);
+        cleanWikiText(text).then(formattedText => {
+          resolve(formattedText);
+        });
       });
     })
     .catch(err => {
       reject(err);
     });
-  });
-
-
-  return new Promise((resolve, reject) => {
-    fetch("https://cors-anywhere.herokuapp.com/"
-      + "http://en.wikipedia.org/w/api.php?"
-      + "action=query&generator=random&prop=extracts&exchars=500&format=json")
-    .then(response => response.json())
-    .then((wikiData) => {
-      let wikiText = wikiData["query"]["pages"][Object.keys(wikiData["query"]["pages"])[0]]["extract"];
-      wikiText = cleanText(wikiText.substring(0, wikiText.length - 3));
-      resolve(wikiText);
-    })
-    .catch((err) => {
-      console.error("Unable to fetch text from Wikipedia", err);
-    })
 
   });
 }
@@ -244,4 +231,48 @@ function speakText(text) {
 function cleanText(text) {
   /* Removes HTML tags and other characters that will interfere with regexs */
   return text.replace(/(<([^>]+)>)/ig,"").replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*\_*]/g, "").trim();
+}
+
+
+function cleanWikiText(wikiText) {
+  /* Removes markup and excessive spacing from Wikipedia text */
+
+  return new Promise((resolve, reject) => {
+    let headings = ["======", "=====", "====", "===", "=="];
+    let workingText = wikiText;
+    let chunks;
+
+    // Remove each heading:
+    const removeHeadings = new Promise((resolve, reject) => {
+      for (let i=0; i<headings.length; i++) {
+        let edits = [];
+        chunks = workingText.split(headings[i]);
+
+        if (chunks.length > 2) {
+          for(let j=0; j<chunks.length; j++) {
+            if (j%2 == 0) {
+              //Odd number, add to array
+              edits.push(chunks[j]);
+            }
+          }
+
+          workingText = edits.join("");
+        }
+
+        if (i == headings.length-1) {
+          // Done with loop
+          resolve(workingText);
+        }
+      }
+
+    });
+
+
+    removeHeadings.then(finalText => {
+      //Remove excessive spaces:
+      finalText = finalText.replace(/\s\s+/g, ' ');
+      resolve(finalText);
+    });
+
+  });
 }
