@@ -22,35 +22,39 @@
 
   <main>
 
-    <div id="loading-data">
-      <svg width="200px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-rolling" style="background: none;">
-        <circle
-          cx="50"
-          cy="50"
-          fill="none"
-          ng-attr-stroke="{{config.color}}"
-          ng-attr-stroke-width="{{config.width}}"
-          ng-attr-r="{{config.radius}}"
-          ng-attr-stroke-dasharray="{{config.dasharray}}"
-          stroke="#8a8807"
-          stroke-width="5"
-          r="30"
-          stroke-dasharray="141.37166941154067 49.12388980384689"
-          transform="rotate(30 50 50)">
-          <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="0.8s" begin="0s" repeatCount="indefinite"></animateTransform>
-        </circle>
-      </svg>
-      <p>Loading Data...</p>
+    <div id="status">
+      <div id="loading-data">
+        <svg width="200px" height="200px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" class="lds-rolling" style="background: none;">
+          <circle
+            cx="50"
+            cy="50"
+            fill="none"
+            ng-attr-stroke="{{config.color}}"
+            ng-attr-stroke-width="{{config.width}}"
+            ng-attr-r="{{config.radius}}"
+            ng-attr-stroke-dasharray="{{config.dasharray}}"
+            stroke="#8a8807"
+            stroke-width="5"
+            r="30"
+            stroke-dasharray="141.37166941154067 49.12388980384689"
+            transform="rotate(30 50 50)">
+            <animateTransform attributeName="transform" type="rotate" calcMode="linear" values="0 50 50;360 50 50" keyTimes="0;1" dur="0.8s" begin="0s" repeatCount="indefinite"></animateTransform>
+          </circle>
+        </svg>
+        <p>Loading Data...</p>
+      </div>
+      <p id="vocab-info"></p>
     </div>
 
     <section id="section-training">
       <h1>Training</h1>
+      <p>Train the generator by entering passages of text below and clicking "Train", or by selecting an example book. You can also choose to let it read through random Wikipedia articles in order to build up its vocabulary. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
       <textarea id="training-box" placeholder="Enter sample text"></textarea>
       <div id="training-controls">
         <button class="btn" id="train-btn">Train</button>
         <div id="wiki-controls">
           <button class="btn" id="wiki-btn">Fetch Text from Wikipedia</button>
-          <input class="maximum wiki-max" type="number" value="100" placeholder="Limit"/>
+          <input class="maximum wiki-max" type="number" value="50" placeholder="Limit"/>
         </div>
       </div>
     </section>
@@ -58,6 +62,7 @@
 
     <section id="section-autocomplete">
       <h1>Autocomplete Demo</h1>
+      <p>This demonstrates the ability to predict what the next word typed will be.</p>
       <div id="suggestions-wrapper">
         <button class="suggestion" id="suggestion-1"></button>
         <button class="suggestion" id="suggestion-2"></button>
@@ -69,6 +74,7 @@
 
     <section id="section-textgen">
       <h1>Text Generation Demo</h1>
+      <p>The system will attempt to generate it's own passage of text based on its existing vocabulary of words.</p>
       <div id="gen-controls">
         <button id="speak-text" class="btn">Speak</button>
         <button class="btn" id="generateBtn">Generate Text</button>
@@ -80,7 +86,9 @@
 
     <section id="section-dialogtree">
       <h1>Dialog Tree Demo</h1>
+      <p>This shows the possible branches of dialog that will be followed, ordered from most likely to least likely. Start typing below to see the progression.</p>
       <input type="text" id="prediction-input" placeholder="Start typing a sentence..."/>
+      <h3 id="no-branches">No Branches Found</h3>
       <div id="dialog-tree">
         <div id="column-1">
           <ul>

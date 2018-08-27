@@ -9,6 +9,7 @@ function loadVocabulary() {
     if (data) {
       vocabulary = data;
       document.getElementById('loading-data').style.display = 'none';
+      document.getElementById('vocab-info').innerHTML = "Vocabulary loaded: <span>" + Object.keys(vocabulary).length + "</span> words";
       console.log("Vocabulary loaded");
       refreshButtons();
     }
@@ -79,7 +80,7 @@ async function getWikiText() {
   return new Promise((resolve, reject) => {
 
     // Get random article title:
-    const randomURL = 'http://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
+    const randomURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
     fetch(randomURL).then(response => { return response.json(); })
     .then(data => {
       let pageID = Object.keys(data["query"]["pages"])[0];

@@ -164,12 +164,16 @@ document.getElementById('speak-text').addEventListener('click', (e) => {
 
 
 predictionInput.addEventListener('keyup', (e) => {
-  if( e.target.value == ""){
+  let foundInVocab = getLastWord(cleanText(e.target.value)) in vocabulary;
+
+  if (!foundInVocab || e.target.value == "") {
     predictCol1.style.display = "none";
     predictCol2.style.display = "none";
     predictCol3.style.display = "none";
+    document.getElementById('no-branches').style.display = "block";
   }
-  else if (getLastWord(cleanText(e.target.value)) in vocabulary) {
+  else if (foundInVocab) {
+    document.getElementById('no-branches').style.display = "none";
     const path = predictPath( getLastWord(cleanText(e.target.value)) );
     if (path.one) {
       predictCol1.style.display = "inline-block";
