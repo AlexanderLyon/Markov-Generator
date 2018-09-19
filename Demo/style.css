@@ -309,28 +309,28 @@ section h1 {
     border: none;
     z-index: 999;
   }
-  nav button, #mobile-menu-btn {
-    display: block;
+  nav button {
+    display: none;
     position: fixed;
     bottom: 10px;
-    right: 20px;
+    right: 25px;
     overflow: hidden;
     margin-bottom: 25px;
     text-align: center;
     color: white;
     line-height: 16px;
     font-weight: bold;
-    font-size: 0.7em;
-    height: 68px;
-    width: 68px;
+    font-size: 1.1em;
+    height: 60px;
+    width: auto;
     border: none;
-    border-radius: 50px;
-    background-color: #5177c6;
+    background-color: none;
     transition: 0.3s;
+    z-index: 900;
   }
-  nav button {
-    text-align: center;
-    padding: 0px;
+  nav button.current {
+    background: none;
+    color: #5178c5;
   }
   #mobile-menu-btn {
     display: block;
@@ -338,10 +338,27 @@ section h1 {
     bottom: 10px;
     right: 20px;
     z-index: 9999;
+    height: 68px;
+    width: 68px;
+    border: none;
+    text-align: center;
+    border-radius: 50px;
+    background-color: #5177c6;
   }
   #mobile-menu-btn:hover {
     cursor: pointer;
     background-color: #415296;
+  }
+  #nav-backdrop { display: none; }
+  nav #mobile-menu-btn.open ~ #nav-backdrop {
+    display: block;
+    background-color: #171727e3;
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    z-index: 800;
   }
 
   textarea { width: 85%; }

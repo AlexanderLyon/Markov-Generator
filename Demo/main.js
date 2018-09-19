@@ -48,6 +48,9 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
       wikiBtn.classList.remove('btn-loading');
       wikiBtn.innerText = "Fetch Text from Wikipedia";
       refreshButtons();
+
+      // Update vocabulary word count
+      document.getElementById('vocab-info').innerHTML = "Vocabulary loaded: <span>" + Object.keys(vocabulary).length + "</span> words";
     });
   }
 
@@ -277,21 +280,28 @@ function refreshButtons() {
 function openMenu() {
   const buttons = document.querySelectorAll('nav button');
 
-  for (let i=0; i<buttons.length; i++) {
-    let float = (100 * (i+1)) + 'px';
-    buttons[i].style.display = 'block';
-    buttons[i].style.bottom = float;
-  }
-  document.getElementById('mobile-menu-btn').classList.add('open');
+  buttons.forEach((button, i) => {
+    button.style.display = 'block';
+    
+    setTimeout(() => {
+      let float = (100 * (i+1)) + 'px';
+      button.style.bottom = float;
+    }, i*100);
+  });
 
+  document.getElementById('mobile-menu-btn').classList.add('open');
 }
 
 
 function closeMenu() {
   const buttons = document.querySelectorAll('nav button');
 
-  for (let i=0; i<buttons.length; i++) {
-    buttons[i].style.bottom = "10px";
-  }
+  buttons.forEach((button, i) => {
+    setTimeout(() => {
+      button.style.bottom = '10px';
+    }, i*100);
+    button.style.display = 'none';
+  });
+
   document.getElementById('mobile-menu-btn').classList.remove('open');
 }
