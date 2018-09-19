@@ -32,6 +32,10 @@ h1 {
   font-size: 1.9em;
   font-weight: 300;
 }
+h3 {
+  color: #FFFFFF;
+  font-weight: 300;
+}
 section {
   margin-bottom: 60px;
 }
@@ -114,7 +118,7 @@ textarea {
   margin: 0 auto;
   resize: none;
   border-radius: 6px;
-  border: none;
+  border: 2px solid #323746;
   color: white;
   background-color: #323746;
   box-sizing: border-box;
@@ -125,7 +129,7 @@ textarea {
 
 textarea:focus, #prediction-input:focus  {
   outline: none;
-  border: 1px solid #5178c5;
+  border-color: #5178c5;
 }
 
 #section-autocomplete, #section-textgen, #section-dialogtree {
@@ -183,6 +187,7 @@ section h1 {
 #vocab-info span { color: white; }
 
 
+
 /******** Training ********/
 #training-controls {
   text-align: center;
@@ -193,9 +198,55 @@ section h1 {
 #wiki-btn, .maximum {
   display: inline-block;
 }
-
 #train-btn, #wiki-controls {
   display: inline-block;
+}
+#sample-text {
+  width: 100%;
+  height: auto;
+  overflow-x: scroll;
+}
+#sample-text img {
+  display: none;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  height: 40px;
+  width: 40px;
+}
+#sample-text div {
+  margin: 0px 10px 20px 10px;
+  display: inline-block;
+  position: relative;
+  box-sizing: border-box;
+  padding: 15px;
+  height: 175px;
+  width: 140px;
+  border: 1px solid white;
+  overflow: hidden;
+  border-radius: 6px;
+}
+#sample-text div:hover {
+  cursor: pointer;
+  background-color: #697286;
+  transition: 0.4s;
+}
+#sample-text div.reading {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+#sample-text div.reading img {
+  display: block;
+}
+#sample-text div p {
+  margin: 0px;
+  font-size: 1.2em;
+  color: #FFFFFF;
+}
+#sample-text div .author {
+  font-size: 0.9em;
+  margin-top: 10px;
+  color: #c9c8cc;
 }
 
 

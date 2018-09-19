@@ -71,6 +71,7 @@ function train(text) {
       vocabulary[words] = sortByOccurrence(vocabulary[words]);
     }
 
+    document.getElementById('vocab-info').innerHTML = "Vocabulary loaded: <span>" + Object.keys(vocabulary).length + "</span> words";
     resolve();
   });
 }

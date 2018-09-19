@@ -31,6 +31,34 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
 });
 
 
+document.querySelectorAll('#sample-text div').forEach(function(book) {
+  book.addEventListener('click', function(e) {
+
+    if (!book.classList.contains('reading')) {
+      const title = this.querySelector("p").innerText;
+      book.classList.add('reading');
+
+      readTextFile(title)
+      .then(text => {
+        // Got text, proceed to training...
+        console.log("Reading: '" + title + "'")
+        train(text.trim()).then(() => {
+          console.log("Training complete");
+          saveVocabulary(vocabulary);
+        });
+        refreshButtons();
+        book.classList.remove('reading');
+      })
+      .catch((err) => {
+        console.error(err);
+        book.classList.remove('reading');
+      });
+    }
+
+  });
+});
+
+
 document.getElementById('wiki-btn').addEventListener('click', (e) => {
   const wikiBtn = document.getElementById('wiki-btn');
   const limit = document.querySelector('.wiki-max').value;
@@ -50,28 +78,10 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
       refreshButtons();
 
       // Update vocabulary word count
-      document.getElementById('vocab-info').innerHTML = "Vocabulary loaded: <span>" + Object.keys(vocabulary).length + "</span> words";
     });
   }
 
 });
-
-
-async function readWikipedia(limit) {
-  for (let i=0; i<limit; i++) {
-    await new Promise(resolve => {
-      getWikiText()
-      .then((response) => {
-        train(response);
-      })
-      .then(() => {
-        const progress = Math.floor(((i+1) / limit) * 100) + "%";
-        document.getElementById('wiki-btn').innerText = "Fetching... (" + progress + ")";
-        resolve();
-      });
-    });
-  }
-}
 
 
 userInputBox.addEventListener('keyup', (e) => {
@@ -239,6 +249,41 @@ for(let i=0; i<treeWordsNext.length; i++){
 }
 
 
+async function readWikipedia(limit) {
+  for (let i=0; i<limit; i++) {
+    await new Promise(resolve => {
+      getWikiText()
+      .then((response) => {
+        train(response);
+      })
+      .then(() => {
+        const progress = Math.floor(((i+1) / limit) * 100) + "%";
+        document.getElementById('wiki-btn').innerText = "Fetching... (" + progress + ")";
+        resolve();
+      });
+    });
+  }
+}
+
+
+function readTextFile(name) {
+  return new Promise((resolve, reject) => {
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", "Sample Text/" + name + ".txt", true);
+    rawFile.onload = function(e) {
+      if (rawFile.status === 200) {
+        const fileContents = rawFile.responseText;
+        resolve(fileContents);
+      }
+      else {
+        reject;
+      }
+    }
+    rawFile.send();
+  });
+}
+
+
 function userInputKeyUp() {
   let words = userInputBox.value.split(" ");
   for(let i=0; i<words.length; i++){
@@ -282,7 +327,7 @@ function openMenu() {
 
   buttons.forEach((button, i) => {
     button.style.display = 'block';
-    
+
     setTimeout(() => {
       let float = (100 * (i+1)) + 'px';
       button.style.bottom = float;
