@@ -25,6 +25,13 @@ body {
   margin: 0px;
   background: #4a505f;
 }
+*::-webkit-scrollbar {
+  width: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #9096a0;
+  border-radius: 50px;
+}
 label { color: white; }
 h1 {
   text-align: center;
@@ -45,11 +52,12 @@ button:focus {
 .btn {
   display: block;
   margin: 20px auto;
+  padding: 0px 15px;
   height: 40px;
   width: auto;
   min-width: 120px;
   background-color: #5178c5;
-  border-radius: 6px;
+  border-radius: 50px;
   border: none;
   color: white;
   font-size: 1.2em;
@@ -113,7 +121,8 @@ main p {
 
 textarea {
   display: block;
-  width: 70%;
+  width: 520px;
+  max-width: 100%;
   height: 200px;
   margin: 0 auto;
   resize: none;
@@ -126,6 +135,8 @@ textarea {
   font-size: 1.1em;
   transition: 300ms;
 }
+
+textarea.disabled { -webkit-appearance: none; }
 
 textarea:focus, #prediction-input:focus  {
   outline: none;
@@ -192,21 +203,42 @@ section h1 {
 #training-controls {
   text-align: center;
 }
-#gen-controls, #wiki-controls {
-  text-align: center;
+#gen-controls, #wiki-text {
+  box-sizing: border-box;
+  padding: 8px;
+}
+#wiki-text {
+  width: 50%;
+  float: left;
+  height: auto;
+  box-sizing: border-box;
+  padding: 8px;
 }
 #wiki-btn, .maximum {
   display: inline-block;
 }
-#train-btn, #wiki-controls {
+#wiki-controls {
+  border: 3px solid #323746;
+  border-radius: 6px;
+  width: 100%;
   display: inline-block;
+  width: 100%;
 }
 #sample-text {
-  width: 100%;
+  width: 50%;
+  float: right;
   height: auto;
-  overflow-x: scroll;
+  box-sizing: border-box;
+  padding: 8px;
 }
-#sample-text img {
+#sample-text #books {
+  height: 300px;
+  width: 100%;
+  overflow-y: scroll;
+  border: 3px solid #323746;
+  border-radius: 6px;
+}
+#books img {
   display: none;
   position: absolute;
   bottom: 0px;
@@ -214,36 +246,36 @@ section h1 {
   height: 40px;
   width: 40px;
 }
-#sample-text div {
-  margin: 0px 10px 20px 10px;
-  display: inline-block;
+#books div {
+  display: block;
   position: relative;
   box-sizing: border-box;
   padding: 15px;
-  height: 175px;
-  width: 140px;
-  border: 1px solid white;
+  height: auto;
+  width: 100%;
   overflow: hidden;
-  border-radius: 6px;
 }
-#sample-text div:hover {
+#books div:not(:last-of-type) {
+  border-bottom: 1px solid white;
+}
+#books div:hover {
   cursor: pointer;
   background-color: #697286;
   transition: 0.4s;
 }
-#sample-text div.reading {
+#books div.reading {
   opacity: 0.5;
   cursor: not-allowed;
 }
-#sample-text div.reading img {
+#books div.reading img {
   display: block;
 }
-#sample-text div p {
+#books div p {
   margin: 0px;
   font-size: 1.2em;
   color: #FFFFFF;
 }
-#sample-text div .author {
+#books div .author {
   font-size: 0.9em;
   margin-top: 10px;
   color: #c9c8cc;
@@ -347,7 +379,13 @@ section h1 {
 
 
 
-@media(max-width: 660px) {
+@media (max-width: 950px) {
+  #wiki-text, #sample-text {
+    width: 100%;
+    float: none;
+  }
+}
+@media (max-width: 660px) {
   main {
     width: 100%;
     padding: 0px 15px;

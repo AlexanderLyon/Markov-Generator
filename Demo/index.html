@@ -49,48 +49,56 @@
 
     <section id="section-training">
       <h1>Training</h1>
-      <p>Train the generator by entering passages of text below and clicking "Train", or by selecting an example book. You can also choose to let it read through random Wikipedia articles in order to build up its vocabulary. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
+      <p>Train the generator by entering passages of text below and clicking "Train". You can also choose to let it read through random Wikipedia articles or an example book below to build up its vocabulary. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
       <textarea id="training-box" placeholder="Enter sample text"></textarea>
       <div id="training-controls">
         <button class="btn" id="train-btn">Train</button>
+      </div>
+
+      <div id="wiki-text">
+        <h3>Fetch text from random Wikipedia articles</h3>
         <div id="wiki-controls">
           <button class="btn" id="wiki-btn">Fetch Text from Wikipedia</button>
           <input class="maximum wiki-max" type="number" value="50" placeholder="Limit"/>
         </div>
       </div>
+
       <div id="sample-text">
         <h3>Or choose from a sample text below</h3>
-        <div>
-          <p>A Tale of Two Cities</p>
-          <p class="author">Charles Dickens</p>
-          <img src="loading.svg" alt="Loading"/>
-        </div>
-        <div>
-          <p>Alice in Wonderland</p>
-          <p class="author">Lewis Carroll</p>
-          <img src="loading.svg" alt="Loading"/>
-        </div>
-        <div>
-          <p>The Grapes of Wrath</p>
-          <p class="author">John Steinbeck</p>
-          <img src="loading.svg" alt="Loading"/>
-        </div>
-        <div>
-          <p>The Old Man of the Sea</p>
-          <p class="author">W.W. Jacobs</p>
-          <img src="loading.svg" alt="Loading"/>
-        </div>
-        <div>
-          <p>Through The Looking Glass</p>
-          <p class="author">Lewis Carroll</p>
-          <img src="loading.svg" alt="Loading"/>
-        </div>
-        <div>
-          <p>Treasure Island</p>
-          <p class="author">Robert Louis Stevenson</p>
-          <img src="loading.svg" alt="Loading"/>
+        <div id="books">
+          <div>
+            <p>A Tale of Two Cities</p>
+            <p class="author">Charles Dickens</p>
+            <img src="loading.svg" alt="Loading"/>
+          </div>
+          <div>
+            <p>Alice in Wonderland</p>
+            <p class="author">Lewis Carroll</p>
+            <img src="loading.svg" alt="Loading"/>
+          </div>
+          <div>
+            <p>The Grapes of Wrath</p>
+            <p class="author">John Steinbeck</p>
+            <img src="loading.svg" alt="Loading"/>
+          </div>
+          <div>
+            <p>The Old Man of the Sea</p>
+            <p class="author">W.W. Jacobs</p>
+            <img src="loading.svg" alt="Loading"/>
+          </div>
+          <div>
+            <p>Through The Looking Glass</p>
+            <p class="author">Lewis Carroll</p>
+            <img src="loading.svg" alt="Loading"/>
+          </div>
+          <div>
+            <p>Treasure Island</p>
+            <p class="author">Robert Louis Stevenson</p>
+            <img src="loading.svg" alt="Loading"/>
+          </div>
         </div>
       </div>
+      
     </section>
 
 
