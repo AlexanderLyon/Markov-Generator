@@ -214,6 +214,14 @@ section h1 {
   box-sizing: border-box;
   padding: 8px;
 }
+.wiki-max {
+  height: 50px;
+  padding-left: 10px;
+  border-radius: 6px;
+  border: none;
+  color: white;
+  background-color: #323746;
+}
 #wiki-btn, .maximum {
   display: inline-block;
 }
