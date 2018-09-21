@@ -203,7 +203,7 @@ section h1 {
 #training-controls {
   text-align: center;
 }
-#gen-controls, #wiki-text {
+#wiki-text {
   box-sizing: border-box;
   padding: 8px;
 }
@@ -305,6 +305,9 @@ section h1 {
 
 
 /******** Text Generation ********/
+#gen-controls {
+  text-align: center;
+}
 #generateBtn { display: inline-block; }
 .maximum {
   height: 33px;
