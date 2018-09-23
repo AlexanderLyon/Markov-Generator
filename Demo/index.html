@@ -120,11 +120,13 @@
       <h1>Text Generation Demo</h1>
       <p>The system will attempt to generate it's own passage of text based on its existing vocabulary of words.</p>
       <div id="gen-controls">
-        <button id="speak-text" class="btn"><i class="fas fa-volume-up"></i></button>
         <button class="btn" id="generateBtn">Generate Text</button>
         <input class="maximum gen-max" type="number" value="100" placeholder="Limit"/>
       </div>
-      <textarea id="text-generation" disabled placeholder="Click the 'Generate Text' button above"></textarea>
+      <div id="text-gen-wrapper">
+        <textarea id="text-generation" disabled placeholder="Click the 'Generate Text' button above"></textarea>
+        <button id="speak-text" class="btn"><i class="fas fa-volume-up"></i></button>
+      </div>
     </section>
 
 

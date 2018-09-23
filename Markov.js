@@ -217,7 +217,7 @@ function speakText(text) {
       if (voices.length > 0) {
         utterance.voice = voices[10];
         utterance.lang = 'en-US';
-        utterance.rate = 0.8;
+        utterance.rate = 1;
         utterance.pitch = 1;
         utterance.text = text;
 
