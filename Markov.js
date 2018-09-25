@@ -92,7 +92,7 @@ async function getWikiText() {
       const article = document.createElement("li");
       var articleText = document.createTextNode("Reading article: \"" + title + "\"");
       article.appendChild(articleText);
-      document.getElementById('wiki-history').append(article);
+      document.getElementById('wiki-history').prepend(article);
 
       // Now fetch its text contents:
       const contentURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&format=json&titles=';

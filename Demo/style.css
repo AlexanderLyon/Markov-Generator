@@ -42,6 +42,7 @@ h1 {
 h3 {
   color: #FFFFFF;
   font-weight: 300;
+  font-size: 1.4em;
 }
 section {
   margin-bottom: 60px;
@@ -76,7 +77,7 @@ button:focus {
   cursor: not-allowed;
 }
 input[type="number"] {
-  height: 40px;
+  height: 35px;
   padding-left: 10px;
   border-radius: 6px;
   border: none;
@@ -136,7 +137,6 @@ textarea {
   resize: none;
   border-radius: 6px;
   border: 2px solid #323746;
-  color: white;
   background-color: #323746;
   box-sizing: border-box;
   padding: 10px;
@@ -213,6 +213,7 @@ section h1 {
 #training-controls {
   text-align: center;
 }
+#train-btn { margin-top: 13px; }
 #wiki-text {
   box-sizing: border-box;
   padding: 8px;
@@ -224,15 +225,22 @@ section h1 {
   box-sizing: border-box;
   padding: 8px;
 }
-#wiki-btn, .maximum {
+.maximum {
   display: inline-block;
+}
+#wiki-btn {
+  display: block;
+  margin: 5 auto;
 }
 #wiki-controls {
   border: 3px solid #323746;
   border-radius: 6px;
-  width: 100%;
+  box-sizing: border-box;
+  overflow-y: scroll;
   display: inline-block;
+  padding: 15px;
   width: 100%;
+  height: 300px;
 }
 #wiki-history {
   list-style: none;
