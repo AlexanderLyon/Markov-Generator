@@ -234,6 +234,14 @@ section h1 {
   display: inline-block;
   width: 100%;
 }
+#wiki-history {
+  list-style: none;
+  padding-left: 0px;
+  color: #FFFFFF;
+}
+#wiki-history li {
+  margin-bottom: 5px;
+}
 #sample-text {
   width: 50%;
   float: right;
@@ -476,7 +484,7 @@ section h1 {
     z-index: 800;
   }
 
-  textarea { width: 90%; }
+  textarea, #prediction-input { width: 90%; }
 
   button.suggestion { width: 30%; }
 

@@ -85,12 +85,18 @@ async function getWikiText() {
     fetch(randomURL).then(response => { return response.json(); })
     .then(data => {
       let pageID = Object.keys(data["query"]["pages"])[0];
-      let title = data["query"]["pages"][pageID]["title"].replace(/\s+/g, "_");
-      console.log("Reading article: '" + data["query"]["pages"][pageID]["title"] + "'");
+      let title = data["query"]["pages"][pageID]["title"];
+      let formattedTitle = title.replace(/\s+/g, "_");
+      console.log("Reading article: '" + title + "'");
+
+      const article = document.createElement("li");
+      var articleText = document.createTextNode("Reading article: \"" + title + "\"");
+      article.appendChild(articleText);
+      document.getElementById('wiki-history').append(article);
 
       // Now fetch its text contents:
       const contentURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&format=json&titles=';
-      fetch(contentURL + title)
+      fetch(contentURL + formattedTitle)
       .then(response => { return response.json(); })
       .then( pageData => {
         let page = Object.keys(pageData['query']['pages'])[0];
@@ -217,7 +223,7 @@ function speakText(text) {
       if (voices.length > 0) {
         utterance.voice = voices[10];
         utterance.lang = 'en-US';
-        utterance.rate = 1;
+        utterance.rate = 0.85;
         utterance.pitch = 1;
         utterance.text = text;
 
