@@ -329,9 +329,9 @@ function openMenu() {
     button.style.display = 'block';
 
     setTimeout(() => {
-      let float = (100 * (i+1)) + 'px';
+      let float = (77 * (i+1)) + 'px';
       button.style.bottom = float;
-    }, i*100);
+    }, i*45);
   });
 
   document.getElementById('mobile-menu-btn').classList.add('open');

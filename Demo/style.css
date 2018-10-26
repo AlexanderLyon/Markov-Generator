@@ -21,9 +21,10 @@
 * {
   font-family: "Roboto", Roboto, sans-serif;
 }
+::selection { background: #c0cbd8; }
 body {
   margin: 0px;
-  background: #4a505f;
+  background: #474e61;
 }
 *::-webkit-scrollbar {
   width: 10px;
@@ -36,7 +37,7 @@ label { color: white; }
 h1 {
   text-align: center;
   color: #FFFFFF;
-  font-size: 1.9em;
+  font-size: 2em;
   font-weight: 300;
 }
 h3 {
@@ -77,9 +78,9 @@ button:focus {
   cursor: not-allowed;
 }
 input[type="number"] {
-  height: 35px;
-  padding-left: 10px;
-  border-radius: 6px;
+  height: 40px;
+  padding: 0px 12px;
+  border-radius: 50px;
   border: none;
   color: white;
   background-color: #323746;
@@ -95,6 +96,7 @@ nav {
   z-index: 900;
 }
 #mobile-menu-btn { display: none; }
+#mobile-menu-btn svg { margin-top: 19px; }
 nav button {
   width: 100%;
   height: 80px;
@@ -105,10 +107,15 @@ nav button {
   color: white;
   border: none;
   background-color: transparent;
-  font-size: 0.8em;
+  font-size: 0.9em;
+}
+nav button i {
+  margin-right: 7px;
+  font-size: 20px;
+  vertical-align: middle;
 }
 nav button:hover:not(.unavailable), .current {
-  background: linear-gradient(to right, #696b79, #4a505f);
+  background: linear-gradient(to right, #606379, #474e61);
 }
 .unavailable {
   opacity: 0.5;
@@ -117,7 +124,7 @@ nav button:hover:not(.unavailable), .current {
 
 main {
   float: right;
-  padding: 0px 35px;
+  padding: 0px 35px 50px 35px;
   position: relative;
   width: calc(100% - 200px);
   box-sizing: border-box;
@@ -138,6 +145,7 @@ textarea {
   border-radius: 6px;
   border: 2px solid #323746;
   background-color: #323746;
+  color: #FFFFFF;
   box-sizing: border-box;
   padding: 10px;
   font-size: 1.1em;
@@ -146,7 +154,7 @@ textarea {
   transition: 300ms;
 }
 
-textarea.disabled { -webkit-appearance: none; }
+textarea:disabled { -webkit-appearance: none; }
 
 textarea:focus, #prediction-input:focus  {
   outline: none;
@@ -159,7 +167,7 @@ textarea:focus, #prediction-input:focus  {
 
 section h1 {
   text-align: left;
-  margin-top: 12px;
+  margin: 10px 0px 11px 0px;
 }
 
 #demos { display: none; }
@@ -182,8 +190,8 @@ section h1 {
   width: 160px;
   border-radius: 50px;
   padding: 5px;
-  background-color: #dede98e8;
-  border: 1px solid #ffff90;
+  background-color: #323747;
+  border: 1px solid #FFFFFF;
 }
 #loading-data svg {
   display: inline-block;
@@ -196,14 +204,14 @@ section h1 {
   line-height: 25px;
   margin: 0px;
   left: 50px;
-  color: #8a8807;
-  font-size: 0.8em;
+  color: #FFFFFF;
+  font-size: 0.9em;
 }
 #vocab-info {
   margin: 0px;
   line-height: 25px;
   float: right;
-  color: #a2a2a2;
+  color: #a1a1af;
 }
 #vocab-info span { color: white; }
 
@@ -229,7 +237,7 @@ section h1 {
   display: inline-block;
 }
 #wiki-btn {
-  display: block;
+  display: inline-block;
   margin: 5 auto;
 }
 #wiki-controls {
@@ -242,6 +250,7 @@ section h1 {
   width: 100%;
   height: 300px;
 }
+#wiki-controls p { margin: 0; }
 #wiki-history {
   list-style: none;
   padding-left: 0px;
@@ -282,6 +291,7 @@ section h1 {
   width: 100%;
   overflow: hidden;
 }
+#books i { margin-right: 5px; }
 #books div:not(:last-of-type) {
   border-bottom: 1px solid white;
 }
@@ -366,7 +376,8 @@ section h1 {
   width: 80%;
   height: 50px;
   border-radius: 6px;
-  border: none;
+  border: 2px solid #323746;
+  -webkit-appearance: none;
   color: white;
   background-color: #323746;
   box-sizing: border-box;
@@ -389,18 +400,18 @@ section h1 {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  background-color: #ebeef1;
+  background-color: #b6cadb;
   text-align: center;
-  border-radius: 3px;
-  border: 1px solid grey;
+  border-radius: 5px;
+  border: 2px solid #8f8f90;
 }
 #column-1 li:hover {
   cursor: pointer;
 }
 #dialog-tree li.high-prob {
   position: relative;
-  background-color: #d5edf7;
-  border-color: #41bcbd;
+  background-color: #94b4d0;
+  border-color: #5178c5;
 }
 #column-1, #column-2, #column-3 {
   display: inline-block;
@@ -411,7 +422,7 @@ section h1 {
 #column-3 { opacity: 0.1; }
 #no-branches {
   display: none;
-  color: #a2a2a2;
+  color: #a1a1af;
   text-align: center;
   font-weight: 200;
   margin-top: 50px;
@@ -427,6 +438,8 @@ section h1 {
     float: none;
   }
 }
+
+
 @media (max-width: 660px) {
   main {
     width: 100%;
@@ -442,19 +455,20 @@ section h1 {
   }
   nav button {
     display: none;
+    padding: 10px 18px;
     position: fixed;
     bottom: 10px;
-    right: 25px;
+    left: 25px;
     overflow: hidden;
     margin-bottom: 25px;
     text-align: center;
     color: white;
     line-height: 16px;
-    font-weight: bold;
-    font-size: 1.1em;
-    height: 60px;
+    font-size: 1em;
+    height: 50px;
     width: auto;
-    border: none;
+    border: 2px solid #4f75c7;
+    border-radius: 50px;
     background-color: none;
     transition: 0.3s;
     z-index: 900;
@@ -466,19 +480,16 @@ section h1 {
   #mobile-menu-btn {
     display: block;
     position: fixed;
-    bottom: 10px;
-    right: 20px;
+    bottom: 22px;
+    right: 22px;
     z-index: 9999;
-    height: 68px;
-    width: 68px;
+    height: 65px;
+    width: 65px;
     border: none;
     text-align: center;
     border-radius: 50px;
     background-color: #5177c6;
-  }
-  #mobile-menu-btn:hover {
-    cursor: pointer;
-    background-color: #415296;
+    box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.45);
   }
   #nav-backdrop { display: none; }
   nav #mobile-menu-btn.open ~ #nav-backdrop {
@@ -492,12 +503,13 @@ section h1 {
     z-index: 800;
   }
 
-  textarea, #prediction-input { width: 90%; }
+  textarea, #prediction-input { width: 95%; }
 
   button.suggestion { width: 30%; }
 
   #speak-text { margin-left: 7.5%; }
 }
+
 
 @media (max-width: 380px) {
   #column-1, #column-2, #column-3 {

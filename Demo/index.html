@@ -12,14 +12,14 @@
 
   <nav>
     <div id="mobile-menu-btn">
-      <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" style="margin-top:20px;" viewBox="0 0 8 8">
+      <svg xmlns="http://www.w3.org/2000/svg" width="25px" height="25px" viewBox="0 0 8 8">
         <path fill="#FFFFFF" d="M0 0v1h8v-1h-8zm0 2.97v1h8v-1h-8zm0 3v1h8v-1h-8z" transform="translate(0 1)" />
       </svg>
     </div>
-    <button id="training-btn" class="nav-btn current">Training</button>
-    <button id="autocomplete-btn" class="nav-btn">Autocomplete Demo</button>
-    <button id="textgen-btn" class="nav-btn">Text Generation</button>
-    <button id="dialogtree-btn" class="nav-btn">Dialog Tree</button>
+    <button id="training-btn" class="nav-btn current"><i class="fas fa-graduation-cap"></i> Training</button>
+    <button id="autocomplete-btn" class="nav-btn"><i class="fas fa-pen"></i> Autocompletion</button>
+    <button id="textgen-btn" class="nav-btn"><i class="fas fa-brain"></i> Text Generation</button>
+    <button id="dialogtree-btn" class="nav-btn"><i class="fas fa-comment-alt"></i> Dialog Tree</button>
     <div id="nav-backdrop"></div>
   </nav>
 
@@ -36,7 +36,7 @@
             ng-attr-stroke-width="{{config.width}}"
             ng-attr-r="{{config.radius}}"
             ng-attr-stroke-dasharray="{{config.dasharray}}"
-            stroke="#8a8807"
+            stroke="#FFFFFF"
             stroke-width="5"
             r="30"
             stroke-dasharray="141.37166941154067 49.12388980384689"
@@ -51,7 +51,7 @@
 
     <section id="section-training">
       <h1>Training</h1>
-      <p>Train the generator by entering passages of text below and clicking "Train". You can also choose to let it read through random Wikipedia articles or an example book below to build up its vocabulary. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
+      <p>Train the generator by entering passages of text below and clicking "Train". You can also choose to let it read through random Wikipedia articles or a classic novel below to build up its vocabulary. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
       <textarea id="training-box" placeholder="Enter sample text"></textarea>
       <div id="training-controls">
         <button class="btn" id="train-btn">Train</button>
@@ -60,45 +60,45 @@
       <div id="wiki-text">
         <h3>Fetch text from random Wikipedia articles</h3>
         <div id="wiki-controls">
-          <p style="display: inline;">How many articles should it read?</p>
-          <input class="maximum wiki-max" type="number" value="50" placeholder="Limit"/>
+          <p>How many articles should it read?</p>
           <button class="btn" id="wiki-btn">Fetch Text from Wikipedia</button>
+          <input class="maximum wiki-max" type="number" value="20" placeholder="Limit"/>
           <hr>
           <ul id="wiki-history"></ul>
         </div>
       </div>
 
       <div id="sample-text">
-        <h3>Or choose from a sample text below</h3>
+        <h3>Choose from a classic novel</h3>
         <div id="books">
           <div>
             <p>A Tale of Two Cities</p>
-            <p class="author">Charles Dickens</p>
+            <p class="author"><i class="fas fa-user"></i> Charles Dickens</p>
             <img src="loading.svg" alt="Loading"/>
           </div>
           <div>
             <p>Alice in Wonderland</p>
-            <p class="author">Lewis Carroll</p>
+            <p class="author"><i class="fas fa-user"></i> Lewis Carroll</p>
             <img src="loading.svg" alt="Loading"/>
           </div>
           <div>
             <p>The Grapes of Wrath</p>
-            <p class="author">John Steinbeck</p>
+            <p class="author"><i class="fas fa-user"></i> John Steinbeck</p>
             <img src="loading.svg" alt="Loading"/>
           </div>
           <div>
             <p>The Old Man of the Sea</p>
-            <p class="author">W.W. Jacobs</p>
+            <p class="author"><i class="fas fa-user"></i> W.W. Jacobs</p>
             <img src="loading.svg" alt="Loading"/>
           </div>
           <div>
             <p>Through The Looking Glass</p>
-            <p class="author">Lewis Carroll</p>
+            <p class="author"><i class="fas fa-user"></i> Lewis Carroll</p>
             <img src="loading.svg" alt="Loading"/>
           </div>
           <div>
             <p>Treasure Island</p>
-            <p class="author">Robert Louis Stevenson</p>
+            <p class="author"><i class="fas fa-user"></i> Robert Louis Stevenson</p>
             <img src="loading.svg" alt="Loading"/>
           </div>
         </div>
