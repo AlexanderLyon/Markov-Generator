@@ -9,7 +9,7 @@ function loadVocabulary() {
     if (data) {
       vocabulary = data;
       document.getElementById('loading-data').style.display = 'none';
-      document.getElementById('vocab-info').innerHTML = "Vocabulary loaded: <span>" + Object.keys(vocabulary).length + "</span> words";
+      document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length + "</span> words";
       console.log("Vocabulary loaded");
       refreshButtons();
     }
@@ -71,7 +71,7 @@ function train(text) {
       vocabulary[words] = sortByOccurrence(vocabulary[words]);
     }
 
-    document.getElementById('vocab-info').innerHTML = "Vocabulary loaded: <span>" + Object.keys(vocabulary).length + "</span> words";
+    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length + "</span> words";
     resolve();
   });
 }
