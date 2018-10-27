@@ -189,8 +189,9 @@ section h1 {
 }
 #loading-data {
   display: none;
-  position: relative;
-  float: right;
+  position: absolute;
+  right: 25px;
+  top: 13px;
   height: 25px;
   width: 160px;
   border-radius: 50px;

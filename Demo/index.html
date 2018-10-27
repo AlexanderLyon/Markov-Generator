@@ -46,14 +46,14 @@
         </svg>
         <p>Loading Data...</p>
       </div>
-      <p id="vocab-info"></p>
+      <p id="vocab-info"><i class='fas fa-database'></i> No Vocabulary found</p>
     </div>
 
     <section id="section-training">
       <h1>Training</h1>
 
       <div class="left">
-        <p>Train the generator by entering passages of text below and clicking "Train". You can also choose to let it read through random Wikipedia articles or a classic novel below to build up its vocabulary. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
+        <p>Train by entering your own passages of text below, fetching text from random Wikipedia articles, or reading entire novels to build up vocabulary database. In theory, the more text the system is fed, the more naturally its language will appear to flow.</p>
         <textarea id="training-box" placeholder="Enter sample text"></textarea>
         <button class="btn" id="train-btn">Train</button>
 
@@ -123,7 +123,7 @@
 
     <section id="section-textgen">
       <h1>Text Generation Demo</h1>
-      <p>The system will attempt to generate it's own passage of text based on its existing vocabulary of words.</p>
+      <p>The system will attempt to generate its own passage of text based on the existing vocabulary of words. Choose how many words to print and click 'Generate Text'.</p>
       <div id="gen-controls">
         <button class="btn" id="generateBtn">Generate Text</button>
         <input class="maximum gen-max" type="number" value="100" placeholder="Limit"/>

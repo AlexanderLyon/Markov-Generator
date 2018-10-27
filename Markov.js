@@ -8,8 +8,9 @@ function loadVocabulary() {
   .then((data) => {
     if (data) {
       vocabulary = data;
+      const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
       document.getElementById('loading-data').style.display = 'none';
-      document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length + "</span> words";
+      document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + vocabCount + "</span> words";
       console.log("Vocabulary loaded");
       refreshButtons();
     }
@@ -70,8 +71,8 @@ function train(text) {
     for (let words in vocabulary){
       vocabulary[words] = sortByOccurrence(vocabulary[words]);
     }
-
-    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length + "</span> words";
+    const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + vocabCount + "</span> words";
     resolve();
   });
 }
