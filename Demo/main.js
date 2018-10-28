@@ -35,7 +35,7 @@ document.querySelectorAll('#sample-text div').forEach(function(book) {
   book.addEventListener('click', function(e) {
     e.stopPropagation();
     if (!book.classList.contains('reading')) {
-      const title = this.querySelector("p").innerText;
+      const title = this.getAttribute('data-title');
       book.classList.add('reading');
 
       readTextFile(title).then((text) => {
@@ -47,6 +47,14 @@ document.querySelectorAll('#sample-text div').forEach(function(book) {
         });
         refreshButtons();
         book.classList.remove('reading');
+
+        // If 'Read' label isn't present, add it:
+        if (!book.querySelector('p .book-read')) {
+          let span = document.createElement('span');
+          span.classList.add('book-read');
+          span.innerHTML = '<i class="fas fa-check"></i> Read';
+          book.querySelector('p').appendChild(span);
+        }
       })
       .catch((err) => {
         console.error(err);
