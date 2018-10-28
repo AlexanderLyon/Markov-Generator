@@ -13,7 +13,7 @@ const columnThreeLi = document.querySelectorAll('#column-3 li');
 const treeWordsNext = document.querySelectorAll('#column-1 li');
 
 
-//===== Event Handlers ===================================
+// ===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
   document.getElementById('train-btn').innerText = "Training...";
   const text = document.getElementById('training-box').value.trim();
@@ -33,13 +33,12 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
 
 document.querySelectorAll('#sample-text div').forEach(function(book) {
   book.addEventListener('click', function(e) {
-
+    e.stopPropagation();
     if (!book.classList.contains('reading')) {
       const title = this.querySelector("p").innerText;
       book.classList.add('reading');
 
-      readTextFile(title)
-      .then(text => {
+      readTextFile(title).then((text) => {
         // Got text, proceed to training...
         console.log("Reading: '" + title + "'")
         train(text.trim()).then(() => {
@@ -54,7 +53,6 @@ document.querySelectorAll('#sample-text div').forEach(function(book) {
         book.classList.remove('reading');
       });
     }
-
   });
 });
 
@@ -63,12 +61,11 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
   const wikiBtn = document.getElementById('wiki-btn');
   const limit = document.querySelector('.wiki-max').value;
 
-  if(!wikiBtn.classList.contains('btn-loading')) {
+  if (!wikiBtn.classList.contains('btn-loading')) {
     wikiBtn.innerText = "Fetching...";
     wikiBtn.classList.add('btn-loading');
 
-    readWikipedia(limit)
-    .then(() => {
+    readWikipedia(limit).then(() => {
       return saveVocabulary(vocabulary);
     })
     .then( () => {
@@ -80,7 +77,6 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
       // Update vocabulary word count
     });
   }
-
 });
 
 
@@ -93,13 +89,13 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
   const thisBtn = document.getElementsByClassName("nav-btn")[i];
 
   thisBtn.addEventListener('click', (e) => {
-    if (document.getElementById('mobile-menu-btn').classList.contains('open')) {
-      closeMenu();
-    }
-
     if (!thisBtn.classList.contains('current') && !thisBtn.classList.contains('unavailable')) {
       document.querySelector('.current').classList.remove('current');
       thisBtn.classList.add('current');
+
+      if (document.getElementById('mobile-menu-btn').classList.contains('open')) {
+        closeMenu();
+      }
 
       switch (e.currentTarget.getAttribute("id")) {
         case "training-btn":
@@ -128,7 +124,6 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
           break;
       }
     }
-
   })
 }
 
@@ -145,7 +140,7 @@ document.getElementById('mobile-menu-btn').addEventListener('click', (e) => {
 });
 
 
-for(let i=0; i<suggestionButtons.length; i++){
+for (let i=0; i<suggestionButtons.length; i++) {
   suggestionButtons[i].addEventListener('click', (e) => {
     if (e.target.innerText.trim() != "") {
       const existingText = userInputBox.value;
@@ -239,7 +234,7 @@ predictionInput.addEventListener('keyup', (e) => {
   }
 });
 
-for(let i=0; i<treeWordsNext.length; i++){
+for (let i=0; i<treeWordsNext.length; i++) {
   treeWordsNext[i].addEventListener('click', (e) => {
     const word = e.target.innerText;
     const firstChar = predictionInput.value[predictionInput.value.length-1] == " " ? "" : " ";
@@ -248,10 +243,10 @@ for(let i=0; i<treeWordsNext.length; i++){
   });
 }
 
-
 async function readWikipedia(limit) {
+// async function readWikipedia(limit) {
   for (let i=0; i<limit; i++) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       getWikiText()
       .then((response) => {
         train(response);
@@ -268,7 +263,7 @@ async function readWikipedia(limit) {
 
 function readTextFile(name) {
   return new Promise((resolve, reject) => {
-    var rawFile = new XMLHttpRequest();
+    const rawFile = new XMLHttpRequest();
     rawFile.open("GET", "Sample Text/" + name + ".txt", true);
     rawFile.onload = function(e) {
       if (rawFile.status === 200) {
@@ -286,7 +281,7 @@ function readTextFile(name) {
 
 function userInputKeyUp() {
   let words = userInputBox.value.split(" ");
-  for(let i=0; i<words.length; i++){
+  for (let i=0; i<words.length; i++) {
     if (words[i] === "") {
       words.splice(i, 1);
     }
@@ -295,7 +290,7 @@ function userInputKeyUp() {
   const lastWord = words[words.length-1];
   const nextWords = vocabulary[lastWord];
 
-  for(let i=0; i<3; i++) {
+  for (let i=0; i<3; i++) {
     if (nextWords && nextWords[i]) {
       suggestionButtons[i].innerText = nextWords[i];
     }

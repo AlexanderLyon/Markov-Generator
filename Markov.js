@@ -49,7 +49,7 @@ function train(text) {
   return new Promise((resolve, reject) => {
     let tokens = cleanText(text).split(" ");
 
-    for(let i=0; i<tokens.length; i++){
+    for (let i=0; i<tokens.length; i++) {
       const thisWord = tokens[i];
 
       if (thisWord in vocabulary) {
@@ -62,13 +62,13 @@ function train(text) {
       else {
         // Not yet in vocabulary, add it & its next word:
         vocabulary[thisWord] = [];
-        if (i+1 < tokens.length){
+        if (i+1 < tokens.length) {
           vocabulary[thisWord].push(tokens[i+1]);
         }
       }
     }
 
-    for (let words in vocabulary){
+    for (let words in vocabulary) {
       vocabulary[words] = sortByOccurrence(vocabulary[words]);
     }
     const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -80,18 +80,17 @@ function train(text) {
 
 async function getWikiText() {
   return new Promise((resolve, reject) => {
-
     // Get random article title:
     const randomURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
     fetch(randomURL).then(response => { return response.json(); })
-    .then(data => {
+    .then((data) => {
       let pageID = Object.keys(data["query"]["pages"])[0];
       let title = data["query"]["pages"][pageID]["title"];
       let formattedTitle = title.replace(/\s+/g, "_");
       console.log("Reading article: '" + title + "'");
 
       const article = document.createElement("li");
-      var articleText = document.createTextNode("Reading article: \"" + title + "\"");
+      const articleText = document.createTextNode("Reading article: \"" + title + "\"");
       article.appendChild(articleText);
       document.getElementById('wiki-history').prepend(article);
 
@@ -110,7 +109,6 @@ async function getWikiText() {
     .catch(err => {
       reject(err);
     });
-
   });
 }
 
@@ -143,7 +141,7 @@ function generateParagraph(limit) {
     }
     else {
       // No words available, randomize next word:
-      nextWord = words[ Math.floor(Math.random() * (words.length)) ];
+      nextWord = words[Math.floor(Math.random() * (words.length))];
     }
 
     capitalize = (thisWord.search(/(\.|\?|!)/g) != -1) ? true : false;
@@ -179,7 +177,8 @@ function sortByOccurrence(word) {
   for (let i=0; i<word.length; i++) {
     if (word[i] in count) {
       count[word[i]]++;
-    } else {
+    }
+    else {
       count[word[i]] = 1;
     }
   }
@@ -199,7 +198,7 @@ function getLastWord(text) {
 }
 
 
-function predictPath( text ) {
+function predictPath(text) {
   let possibilities = {};
   possibilities.one = vocabulary[text];
   if (possibilities.one.length > 0) {
@@ -232,7 +231,6 @@ function speakText(text) {
         clearInterval(loadingVoices);
       }
     }, 500);
-
   }
 }
 
@@ -258,9 +256,9 @@ function cleanWikiText(wikiText) {
         chunks = workingText.split(headings[i]);
 
         if (chunks.length > 2) {
-          for(let j=0; j<chunks.length; j++) {
+          for (let j=0; j<chunks.length; j++) {
             if (j%2 == 0) {
-              //Odd number, add to array
+              // Odd number, add to array
               edits.push(chunks[j]);
             }
           }
@@ -273,15 +271,13 @@ function cleanWikiText(wikiText) {
           resolve(workingText);
         }
       }
-
     });
 
 
-    removeHeadings.then(finalText => {
+    removeHeadings.then((finalText) => {
       //Remove excessive spaces:
       finalText = finalText.replace(/\s\s+/g, ' ');
       resolve(finalText);
     });
-
   });
 }

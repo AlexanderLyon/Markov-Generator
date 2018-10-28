@@ -33,7 +33,10 @@ body {
   background-color: #9096a0;
   border-radius: 50px;
 }
-label { color: white; }
+*::-webkit-input-placeholder {
+  color: #a1a1af;
+}
+label { color: #FFFFFF; }
 h1 {
   text-align: center;
   color: #FFFFFF;
@@ -61,8 +64,12 @@ button:focus {
   background-color: #5178c5;
   border-radius: 50px;
   border: none;
-  color: white;
+  color: #FFFFFF;
   font-size: 1.2em;
+  -webkit-transition: 200ms;
+  -moz-transition: 200ms;
+  -o-transition: 200ms;
+  transition: 200ms;
 }
 .btn:focus {
   outline: none;
@@ -82,10 +89,14 @@ input[type="number"] {
   padding: 0px 12px;
   border-radius: 50px;
   border: none;
-  color: white;
+  color: #FFFFFF;
   background-color: #323746;
   border: 2px solid #323746;
   -webkit-appearance: none;
+  -webkit-transition: 200ms;
+  -moz-transition: 200ms;
+  -o-transition: 200ms;
+  transition: 200ms;
 }
 input[type="number"]:focus {
   outline: none;
@@ -110,10 +121,14 @@ nav button {
   text-align: left;
   color: black;
   cursor: pointer;
-  color: white;
+  color: #FFFFFF;
   border: none;
   background-color: transparent;
   font-size: 0.9em;
+  -webkit-transition: 200ms;
+  -moz-transition: 200ms;
+  -o-transition: 200ms;
+  transition: 200ms;
 }
 nav button i {
   margin-right: 7px;
@@ -137,7 +152,7 @@ main {
 }
 
 main p {
-  color: white;
+  color: #FFFFFF;
 }
 
 
@@ -156,10 +171,13 @@ textarea {
   font-size: 1.1em;
   -webkit-appearance: none;
   -webkit-overflow-scrolling: touch;
+  -webkit-transition: 300ms;
+  -moz-transition: 300ms;
+  -o-transition: 300ms;
   transition: 300ms;
 }
 
-textarea:disabled { -webkit-appearance: none; }
+textarea:disabled { color: #FFFFFF; }
 
 textarea:focus, #prediction-input:focus  {
   outline: none;
@@ -219,7 +237,7 @@ section h1 {
   color: #a1a1af;
 }
 #vocab-info i { margin-right: 4px; }
-#vocab-info span { color: white; }
+#vocab-info span { color: #FFFFFF; }
 
 
 
@@ -249,7 +267,7 @@ section h1 {
 }
 #wiki-btn {
   display: inline-block;
-  margin: 5 auto;
+  margin: 14px auto;
 }
 #wiki-controls {
   border: 3px solid #323746;
@@ -311,12 +329,15 @@ section h1 {
 }
 #books i { margin-right: 5px; }
 #books div:not(:last-of-type) {
-  border-bottom: 1px solid white;
+  border-bottom: 1px solid #FFFFFF;
 }
 #books div:hover {
   cursor: pointer;
   background-color: #697286;
-  transition: 0.4s;
+  -webkit-transition: 400ms;
+  -moz-transition: 400ms;
+  -o-transition: 400ms;
+  transition: 400ms;
 }
 #books div.reading {
   opacity: 0.5;
@@ -333,7 +354,7 @@ section h1 {
 #books div .author {
   font-size: 0.9em;
   margin-top: 10px;
-  color: #c9c8cc;
+  color: #a1a1af;
 }
 
 
@@ -360,7 +381,7 @@ section h1 {
   border-radius: 5px;
   border: none;
   background-color: #5178c5;
-  color: white;
+  color: #FFFFFF;
 }
 
 
@@ -407,11 +428,14 @@ section h1 {
   border-radius: 6px;
   border: 2px solid #323746;
   -webkit-appearance: none;
-  color: white;
+  color: #FFFFFF;
   background-color: #323746;
   box-sizing: border-box;
   padding: 10px;
   font-size: 1.1em;
+  -webkit-transition: 300ms;
+  -moz-transition: 300ms;
+  -o-transition: 300ms;
   transition: 300ms;
 }
 #dialog-tree {
@@ -493,7 +517,7 @@ section h1 {
     overflow: hidden;
     margin-bottom: 25px;
     text-align: center;
-    color: white;
+    color: #FFFFFF;
     line-height: 16px;
     font-size: 1em;
     height: 50px;
@@ -501,12 +525,14 @@ section h1 {
     border: 2px solid #4f75c7;
     border-radius: 50px;
     background-color: none;
-    transition: 0.3s;
     z-index: 900;
   }
   nav button.current {
     background: none;
     color: #5178c5;
+  }
+  nav button.unavailable {
+    border-color: #8c8c94;
   }
   #mobile-menu-btn {
     display: block;
@@ -520,7 +546,7 @@ section h1 {
     text-align: center;
     border-radius: 50px;
     background-color: #5177c6;
-    box-shadow: 0px 2px 13px 0px rgba(0, 0, 0, 0.45);
+    box-shadow: 0px 2px 20px 0px rgba(34, 35, 35, 0.36);
   }
   #nav-backdrop { display: none; }
   nav #mobile-menu-btn.open ~ #nav-backdrop {
