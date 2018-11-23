@@ -101,10 +101,6 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
       document.querySelector('.current').classList.remove('current');
       thisBtn.classList.add('current');
 
-      if (document.getElementById('mobile-menu-btn').classList.contains('open')) {
-        closeMenu();
-      }
-
       switch (e.currentTarget.getAttribute("id")) {
         case "training-btn":
           document.querySelector('#section-training').style.display = "block";
@@ -134,18 +130,6 @@ for (let i=0; i<document.getElementsByClassName("nav-btn").length; i++) {
     }
   })
 }
-
-
-document.getElementById('mobile-menu-btn').addEventListener('click', (e) => {
-  const buttons = document.querySelectorAll('nav button');
-
-  if (e.currentTarget.classList.contains('open')) {
-    closeMenu();
-  }
-  else {
-    openMenu();
-  }
-});
 
 
 for (let i=0; i<suggestionButtons.length; i++) {
@@ -322,34 +306,4 @@ function refreshButtons() {
       buttons[i].classList.remove('unavailable');
     }
   }
-}
-
-
-function openMenu() {
-  const buttons = document.querySelectorAll('nav button');
-
-  buttons.forEach((button, i) => {
-    button.style.display = 'block';
-
-    setTimeout(() => {
-      let float = (77 * (i+1)) + 'px';
-      button.style.bottom = float;
-    }, i*45);
-  });
-
-  document.getElementById('mobile-menu-btn').classList.add('open');
-}
-
-
-function closeMenu() {
-  const buttons = document.querySelectorAll('nav button');
-
-  buttons.forEach((button, i) => {
-    setTimeout(() => {
-      button.style.bottom = '10px';
-    }, i*100);
-    button.style.display = 'none';
-  });
-
-  document.getElementById('mobile-menu-btn').classList.remove('open');
 }
