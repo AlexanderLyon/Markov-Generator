@@ -21,10 +21,10 @@
 * {
   font-family: "Roboto", Roboto, sans-serif;
 }
-::selection { background: #c0cbd8; }
+::selection { background: #aebbca; }
 body {
   margin: 0px;
-  background: #474e61;
+  background: #42465a;
 }
 *::-webkit-scrollbar {
   width: 10px;
@@ -136,7 +136,7 @@ nav button i {
   vertical-align: middle;
 }
 nav button:hover:not(.unavailable), .current {
-  background: linear-gradient(to right, #606379, #474e61);
+  background: linear-gradient(to right, #606379, #42465a);
 }
 .unavailable {
   opacity: 0.5;
@@ -519,7 +519,7 @@ section h1 {
     z-index: 999;
     text-align: center;
     box-shadow: 0px -1px 16px 3px rgba(40, 44, 56, 0.62);
-    background-color: #474e61;
+    background-color: #42465a;
   }
   nav button {
     padding: 0px;
@@ -581,3 +581,4 @@ section h1 {
     margin: 0px 10px;
   }
 }
+
