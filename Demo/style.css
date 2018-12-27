@@ -110,10 +110,6 @@ nav button {
   border: none;
   background-color: transparent;
   font-size: 1em;
-  -webkit-transition: 200ms;
-  -moz-transition: 200ms;
-  -o-transition: 200ms;
-  transition: 200ms;
 }
 nav button i {
   margin-right: 10px;
@@ -181,7 +177,7 @@ textarea:focus, #prediction-input:focus  {
 section h1 {
   text-align: left;
   font-size: 2.2em;
-  margin: 10px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
 }
 
 h2 { margin-bottom: 8px; }
@@ -284,9 +280,6 @@ h2 { margin-bottom: 8px; }
   width: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
-}
-#wiki-history li {
-  margin-bottom: 5px;
 }
 #sample-text {
   margin-top: 16px;
@@ -505,6 +498,9 @@ h2 { margin-bottom: 8px; }
     width: 100%;
     padding: 0px 15px;
   }
+  main > section {
+    margin-bottom: 150px;
+  }
   nav {
     position: fixed;
     top: calc(100% - 85px);
@@ -567,7 +563,7 @@ h2 { margin-bottom: 8px; }
     left: 0px;
     z-index: 800;
   }
-
+  #section-training .left, #section-training .right { float: none; }
   button.suggestion { width: 30%; }
 }
 
