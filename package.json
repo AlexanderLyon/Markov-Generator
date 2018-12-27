@@ -1,0 +1,24 @@
+{
+  "name": "markov-text-generator",
+  "version": "1.0.0",
+  "description": "Random text generation using Markov chains",
+  "main": "Markov.js",
+  "scripts": {
+    "build": "webpack --production",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexanderLyon/Markov-Generator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexanderLyon/Markov-Generator/issues"
+  },
+  "homepage": "https://github.com/AlexanderLyon/Markov-Generator#readme",
+  "devDependencies": {
+    "webpack": "^4.28.2",
+    "webpack-cli": "^3.1.2"
+  }
+}
