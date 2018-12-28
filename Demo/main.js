@@ -98,8 +98,6 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
       wikiBtn.innerText = "Fetch Text from Wikipedia";
       vocabulary = markov.getVocabulary();
       refreshButtons();
-
-      // Update vocabulary word count
     });
   }
 });
@@ -251,6 +249,7 @@ for (let i=0; i<treeWordsNext.length; i++) {
     predictionInput.dispatchEvent(keyupEvent);
   });
 }
+
 
 async function readWikipedia(limit) {
 // async function readWikipedia(limit) {

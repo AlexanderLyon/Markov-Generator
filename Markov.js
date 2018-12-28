@@ -32,11 +32,11 @@ function saveVocabulary(vocabulary) {
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
     xhr.onload = () => {
       if (xhr.status === 200) {
-        console.log("Saved!");
+        // console.log("Saved!");
         resolve();
       }
     };
-    xhr.send("data=" + JSON.stringify(vocabulary));
+    xhr.send("data=" + encodeURIComponent(JSON.stringify(vocabulary)));
   });
 }
 
