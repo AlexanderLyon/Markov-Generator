@@ -1,3 +1,5 @@
+const markov = require('../Markov.js');
+let vocabulary;
 
 const keyupEvent = new Event('keyup');
 const userInputBox = document.getElementById('user-input');
@@ -12,16 +14,31 @@ const predictCol3 = document.querySelector('#column-3 ul');
 const columnThreeLi = document.querySelectorAll('#column-3 li');
 const treeWordsNext = document.querySelectorAll('#column-1 li');
 
+document.getElementById('loading-data').style.display = 'block';
+markov.loadVocabulary().then(() => {
+  document.getElementById('loading-data').style.display = 'none';
+  vocabulary = markov.getVocabulary();
+
+  if (Object.keys(vocabulary).length > 0) {
+    const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + vocabCount + "</span> words";
+  }
+  else {
+    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> No Vocabulary found";
+  }
+
+  refreshButtons();
+});
+
 
 // ===== Event Handlers ===================================
 document.getElementById('train-btn').addEventListener('click', (e) => {
   document.getElementById('train-btn').innerText = "Training...";
   const text = document.getElementById('training-box').value.trim();
-  train(text).then(() => {
+  markov.train(text).then(() => {
     console.log("Training complete");
     document.getElementById('train-btn').innerText = "Training Complete!";
-
-    saveVocabulary(vocabulary);
+    vocabulary = markov.getVocabulary();
 
     setTimeout(() => {
       document.getElementById('train-btn').innerText = "Train";
@@ -41,20 +58,21 @@ document.querySelectorAll('#sample-text div').forEach(function(book) {
       readTextFile(title).then((text) => {
         // Got text, proceed to training...
         console.log("Reading: '" + title + "'")
-        train(text.trim()).then(() => {
+        markov.train(text.trim()).then(() => {
           console.log("Training complete");
-          saveVocabulary(vocabulary);
-        });
-        refreshButtons();
-        book.classList.remove('reading');
+          vocabulary = markov.getVocabulary();
+          refreshButtons();
+          book.classList.remove('reading');
 
-        // If 'Read' label isn't present, add it:
-        if (!book.querySelector('p .book-read')) {
-          let span = document.createElement('span');
-          span.classList.add('book-read');
-          span.innerHTML = '<i class="fas fa-check"></i> Read';
-          book.querySelector('p').appendChild(span);
-        }
+          // If 'Read' label isn't present, add it:
+          if (!book.querySelector('p .book-read')) {
+            let span = document.createElement('span');
+            span.classList.add('book-read');
+            span.innerHTML = '<i class="fas fa-check"></i> Read';
+            book.querySelector('p').appendChild(span);
+          }
+        });
+        
       })
       .catch((err) => {
         console.error(err);
@@ -73,13 +91,12 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
     wikiBtn.innerText = "Fetching...";
     wikiBtn.classList.add('btn-loading');
 
-    readWikipedia(limit).then(() => {
-      return saveVocabulary(vocabulary);
-    })
+    readWikipedia(limit)
     .then( () => {
       console.log("Training complete \nRead " + limit + " entries.");
       wikiBtn.classList.remove('btn-loading');
       wikiBtn.innerText = "Fetch Text from Wikipedia";
+      vocabulary = markov.getVocabulary();
       refreshButtons();
 
       // Update vocabulary word count
@@ -152,7 +169,7 @@ for (let i=0; i<suggestionButtons.length; i++) {
 
 document.getElementById('generateBtn').addEventListener('click', (e) => {
   const max = document.querySelector('.gen-max').value - 1;
-  textGenerateBox.innerText = generateParagraph(max);
+  textGenerateBox.innerText = markov.generateParagraph(max);
   if (textGenerateBox.value.length > 0) {
     document.getElementById('speak-text').style.display = "inline-block";
   }
@@ -174,7 +191,7 @@ predictionInput.addEventListener('keyup', (e) => {
   }
   else if (foundInVocab) {
     document.getElementById('no-branches').style.display = "none";
-    const path = predictPath( getLastWord(cleanText(e.target.value)) );
+    const path = markov.predictPath( getLastWord(cleanText(e.target.value)) );
     if (path.one) {
       predictCol1.style.display = "inline-block";
       columnOneLi.forEach( (el, index) => {
@@ -241,7 +258,7 @@ async function readWikipedia(limit) {
     await new Promise((resolve) => {
       getWikiText()
       .then((response) => {
-        train(response);
+        return markov.train(response);
       })
       .then(() => {
         const progress = Math.floor(((i+1) / limit) * 100) + "%";
@@ -305,5 +322,117 @@ function refreshButtons() {
     for (let i=0; i<buttons.length; i++) {
       buttons[i].classList.remove('unavailable');
     }
+  }
+}
+
+
+function getLastWord(text) {
+  const tokens = text.split(" ");
+  return tokens[tokens.length-1];
+}
+
+
+function cleanText(text) {
+  /* Removes HTML tags and other characters that will interfere with regexs */
+  return text.replace(/(<([^>]+)>)/ig,"").replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*\_*]/g, "").trim();
+}
+
+
+async function getWikiText() {
+  return new Promise((resolve, reject) => {
+    // Get random article title:
+    const randomURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
+    fetch(randomURL).then(response => { return response.json(); })
+    .then((data) => {
+      let pageID = Object.keys(data["query"]["pages"])[0];
+      let title = data["query"]["pages"][pageID]["title"];
+      let formattedTitle = title.replace(/\s+/g, "_");
+      console.log("Reading article: '" + title + "'");
+
+      const article = document.createElement("li");
+      const articleText = document.createTextNode("Reading article: \"" + title + "\"");
+      article.appendChild(articleText);
+      document.getElementById('wiki-history').prepend(article);
+
+      // Now fetch its text contents:
+      const contentURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&format=json&titles=';
+      fetch(contentURL + formattedTitle)
+      .then(response => { return response.json(); })
+      .then( pageData => {
+        let page = Object.keys(pageData['query']['pages'])[0];
+        let text = pageData['query']['pages'][page]['extract'];
+        cleanWikiText(text).then(formattedText => {
+          resolve(formattedText);
+        });
+      });
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
+
+function cleanWikiText(wikiText) {
+  /* Removes markup and excessive spacing from Wikipedia text */
+
+  return new Promise((resolve, reject) => {
+    let headings = ["======", "=====", "====", "===", "=="];
+    let workingText = wikiText;
+    let chunks;
+
+    // Remove each heading:
+    const removeHeadings = new Promise((resolve, reject) => {
+      for (let i=0; i<headings.length; i++) {
+        let edits = [];
+        chunks = workingText.split(headings[i]);
+
+        if (chunks.length > 2) {
+          for (let j=0; j<chunks.length; j++) {
+            if (j%2 == 0) {
+              // Odd number, add to array
+              edits.push(chunks[j]);
+            }
+          }
+
+          workingText = edits.join("");
+        }
+
+        if (i == headings.length-1) {
+          // Done with loop
+          resolve(workingText);
+        }
+      }
+    });
+
+
+    removeHeadings.then((finalText) => {
+      //Remove excessive spaces:
+      finalText = finalText.replace(/\s\s+/g, ' ');
+      resolve(finalText);
+    });
+  });
+}
+
+
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance();
+
+    //Load voices before proceeding:
+    const loadingVoices = setInterval( () => {
+      const voices = window.speechSynthesis.getVoices();
+
+      if (voices.length > 0) {
+        utterance.voice = voices[10];
+        utterance.lang = 'en-US';
+        utterance.rate = 0.85;
+        utterance.pitch = 1;
+        utterance.text = text;
+
+        speechSynthesis.speak(utterance);
+        clearInterval(loadingVoices);
+      }
+    }, 500);
   }
 }

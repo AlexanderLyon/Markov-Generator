@@ -1,30 +1,26 @@
 let vocabulary;
-loadVocabulary();
+
+
+function getVocabulary() {
+  return vocabulary;
+}
+
 
 function loadVocabulary() {
-  document.getElementById('loading-data').style.display = 'block';
-  fetch('../utilities/getVocabulary.php')
+  return fetch('../utilities/getVocabulary.php')
   .then(response => response.json())
   .then((data) => {
     if (data) {
       vocabulary = data;
-      const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      document.getElementById('loading-data').style.display = 'none';
-      document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + vocabCount + "</span> words";
       console.log("Vocabulary loaded");
-      refreshButtons();
     }
     else {
       vocabulary = {};
-      document.getElementById('loading-data').style.display = 'none';
-      refreshButtons();
     }
   })
   .catch((err) => {
     console.warn("Unable to fetch vocabulary. The JSON file is most likely empty. \nCreating a new vocabulary object...");
     vocabulary = {};
-    document.getElementById('loading-data').style.display = 'none';
-    refreshButtons();
   });
 }
 
@@ -74,42 +70,15 @@ function train(text) {
     const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + vocabCount + "</span> words";
     resolve();
+  }).then(() => {
+    return saveVocabulary(vocabulary);
   });
 }
 
 
-async function getWikiText() {
-  return new Promise((resolve, reject) => {
-    // Get random article title:
-    const randomURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&generator=random&grnnamespace=0&prop=content&exchars=500&format=json';
-    fetch(randomURL).then(response => { return response.json(); })
-    .then((data) => {
-      let pageID = Object.keys(data["query"]["pages"])[0];
-      let title = data["query"]["pages"][pageID]["title"];
-      let formattedTitle = title.replace(/\s+/g, "_");
-      console.log("Reading article: '" + title + "'");
-
-      const article = document.createElement("li");
-      const articleText = document.createTextNode("Reading article: \"" + title + "\"");
-      article.appendChild(articleText);
-      document.getElementById('wiki-history').prepend(article);
-
-      // Now fetch its text contents:
-      const contentURL = 'https://en.wikipedia.org/w/api.php?action=query&origin=*&prop=extracts&explaintext&format=json&titles=';
-      fetch(contentURL + formattedTitle)
-      .then(response => { return response.json(); })
-      .then( pageData => {
-        let page = Object.keys(pageData['query']['pages'])[0];
-        let text = pageData['query']['pages'][page]['extract'];
-        cleanWikiText(text).then(formattedText => {
-          resolve(formattedText);
-        });
-      });
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
+function cleanText(text) {
+  /* Removes HTML tags and other characters that will interfere with regexs */
+  return text.replace(/(<([^>]+)>)/ig,"").replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*\_*]/g, "").trim();
 }
 
 
@@ -152,23 +121,6 @@ function generateParagraph(limit) {
 }
 
 
-function isRepeating(text) {
-  const tokens = text.split(" ");
-  let repeats = false;
-
-  if (tokens.length > 10) {
-    let phrase = tokens.slice(Math.max(tokens.length - 3, 1)).join(" ");
-    let lastTenWords = tokens.slice(Math.max(tokens.length - 25, 1)).splice(0, 22).join(" ");
-    repeats = (lastTenWords.search(phrase) == -1) ? false : true;
-    if (repeats) {
-      console.log("Repeating phrase '" + phrase + "'");
-    }
-  }
-
-  return repeats;
-}
-
-
 function sortByOccurrence(word) {
   const count = {};
   let sortedList = [];
@@ -192,12 +144,6 @@ function sortByOccurrence(word) {
 }
 
 
-function getLastWord(text) {
-  const tokens = text.split(" ");
-  return tokens[tokens.length-1];
-}
-
-
 function predictPath(text) {
   let possibilities = {};
   possibilities.one = vocabulary[text];
@@ -212,72 +158,10 @@ function predictPath(text) {
 }
 
 
-function speakText(text) {
-  if ('speechSynthesis' in window) {
-    const utterance = new SpeechSynthesisUtterance();
-
-    //Load voices before proceeding:
-    const loadingVoices = setInterval( () => {
-      const voices = window.speechSynthesis.getVoices();
-
-      if (voices.length > 0) {
-        utterance.voice = voices[10];
-        utterance.lang = 'en-US';
-        utterance.rate = 0.85;
-        utterance.pitch = 1;
-        utterance.text = text;
-
-        speechSynthesis.speak(utterance);
-        clearInterval(loadingVoices);
-      }
-    }, 500);
-  }
-}
-
-
-function cleanText(text) {
-  /* Removes HTML tags and other characters that will interfere with regexs */
-  return text.replace(/(<([^>]+)>)/ig,"").replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*\_*]/g, "").trim();
-}
-
-
-function cleanWikiText(wikiText) {
-  /* Removes markup and excessive spacing from Wikipedia text */
-
-  return new Promise((resolve, reject) => {
-    let headings = ["======", "=====", "====", "===", "=="];
-    let workingText = wikiText;
-    let chunks;
-
-    // Remove each heading:
-    const removeHeadings = new Promise((resolve, reject) => {
-      for (let i=0; i<headings.length; i++) {
-        let edits = [];
-        chunks = workingText.split(headings[i]);
-
-        if (chunks.length > 2) {
-          for (let j=0; j<chunks.length; j++) {
-            if (j%2 == 0) {
-              // Odd number, add to array
-              edits.push(chunks[j]);
-            }
-          }
-
-          workingText = edits.join("");
-        }
-
-        if (i == headings.length-1) {
-          // Done with loop
-          resolve(workingText);
-        }
-      }
-    });
-
-
-    removeHeadings.then((finalText) => {
-      //Remove excessive spaces:
-      finalText = finalText.replace(/\s\s+/g, ' ');
-      resolve(finalText);
-    });
-  });
+module.exports = {
+  getVocabulary: getVocabulary,
+  loadVocabulary: loadVocabulary,
+  train: train,
+  predictPath: predictPath,
+  generateParagraph: generateParagraph,
 }
