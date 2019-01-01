@@ -1,4 +1,11 @@
 const markov = require('../Markov.js');
+const Haystack = require('haystack-search');
+const haystack = new Haystack({
+  flexibility: 0,
+  caseSensitive: false,
+  ignoreStopWords: false,
+  stemming: false
+});
 let vocabulary;
 
 const keyupEvent = new Event('keyup');
@@ -153,9 +160,13 @@ for (let i=0; i<suggestionButtons.length; i++) {
       const existingText = userInputBox.value;
       let newText;
       if (existingText[existingText.length-1] !== " ") {
-        newText = existingText + " " + e.target.innerText + " ";
+        // Replace last word
+        let tokens = existingText.split(' ');
+        tokens.pop();
+        newText = tokens.join(' ') + " " + e.target.innerText + " ";
       }
       else {
+        // Add new word
         newText = existingText + e.target.innerText + " ";
       }
       userInputBox.value = newText;
@@ -288,22 +299,42 @@ function readTextFile(name) {
 
 
 function userInputKeyUp() {
+  const lastChar = userInputBox.value[userInputBox.value.length-1];
   let words = userInputBox.value.split(" ");
-  for (let i=0; i<words.length; i++) {
-    if (words[i] === "") {
-      words.splice(i, 1);
+  let lastWord = words[words.length-1];
+
+  if (lastChar !== ' ' && lastWord.length > 1) {
+    // Word in progress, guess what it will be
+    const wordPool = Object.keys(vocabulary);
+    const completions = haystack.search(lastWord, wordPool, 3);
+
+    for (let i=0; i<3; i++) {
+      if (completions && completions[i]) {
+        suggestionButtons[i].innerText = completions[i];
+      }
+      else {
+        suggestionButtons[i].innerText = "";
+      }
     }
   }
-
-  const lastWord = words[words.length-1];
-  const nextWords = vocabulary[lastWord];
-
-  for (let i=0; i<3; i++) {
-    if (nextWords && nextWords[i]) {
-      suggestionButtons[i].innerText = nextWords[i];
+  else {
+    // Guess next word
+    for (let i=0; i<words.length; i++) {
+      if (words[i] === "") {
+        words.splice(i, 1);
+      }
     }
-    else {
-      suggestionButtons[i].innerText = "";
+  
+    lastWord = words[words.length-1];
+    const nextWords = vocabulary[lastWord];
+  
+    for (let i=0; i<3; i++) {
+      if (nextWords && nextWords[i]) {
+        suggestionButtons[i].innerText = nextWords[i];
+      }
+      else {
+        suggestionButtons[i].innerText = "";
+      }
     }
   }
 }
