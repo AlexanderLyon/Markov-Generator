@@ -8,7 +8,7 @@
 body {
   margin: 0px;
   height: 100vh;
-  background: linear-gradient(to bottom right, #32364a, #4a5067);
+  background-color: rgb(42, 47, 66);
 }
 *::-webkit-scrollbar {
   width: 10px;
@@ -130,7 +130,9 @@ main {
   padding: 0px 35px 45px 35px;
   position: relative;
   width: calc(100% - 200px);
+  min-height: 100vh;
   box-sizing: border-box;
+  background: linear-gradient(to bottom right, #32364a, #4a5067);
 }
 
 main p {

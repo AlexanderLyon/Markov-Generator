@@ -172,6 +172,7 @@ for (let i=0; i<suggestionButtons.length; i++) {
       userInputBox.value = newText;
       userInputKeyUp();
     }
+    userInputBox.focus();
   });
 }
 
@@ -303,7 +304,7 @@ function userInputKeyUp() {
   let words = userInputBox.value.split(" ");
   let lastWord = words[words.length-1];
 
-  if (lastChar !== ' ' && lastWord.length > 1) {
+  if (lastChar !== ' ' && lastWord.length > 0) {
     // Word in progress, guess what it will be
     const wordPool = Object.keys(vocabulary);
     const completions = haystack.search(lastWord, wordPool, 3);
