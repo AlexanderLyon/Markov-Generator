@@ -46,6 +46,7 @@ document.getElementById('train-btn').addEventListener('click', (e) => {
     console.log("Training complete");
     document.getElementById('train-btn').innerText = "Training Complete!";
     vocabulary = markov.getVocabulary();
+    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span> words";
 
     setTimeout(() => {
       document.getElementById('train-btn').innerText = "Train";
@@ -68,6 +69,7 @@ document.querySelectorAll('#sample-text div').forEach(function(book) {
         markov.train(text.trim()).then(() => {
           console.log("Training complete");
           vocabulary = markov.getVocabulary();
+          document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span> words";
           refreshButtons();
           book.classList.remove('reading');
 
@@ -104,6 +106,7 @@ document.getElementById('wiki-btn').addEventListener('click', (e) => {
       wikiBtn.classList.remove('btn-loading');
       wikiBtn.innerText = "Fetch Text from Wikipedia";
       vocabulary = markov.getVocabulary();
+      document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span> words";
       refreshButtons();
     });
   }

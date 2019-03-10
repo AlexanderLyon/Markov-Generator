@@ -67,8 +67,6 @@ function train(text) {
     for (let words in vocabulary) {
       vocabulary[words] = sortByOccurrence(vocabulary[words]);
     }
-    const vocabCount = Object.keys(vocabulary).length.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    document.getElementById('vocab-info').innerHTML = "<i class='fas fa-database'></i> Vocabulary: <span>" + vocabCount + "</span> words";
     resolve();
   }).then(() => {
     return saveVocabulary(vocabulary);
