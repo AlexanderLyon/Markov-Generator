@@ -1,13 +1,14 @@
 const markov = require('../Markov.js');
 const Haystack = require('haystack-search');
+
 const haystack = new Haystack({
   flexibility: 0,
   caseSensitive: false,
   ignoreStopWords: false,
   stemming: false
 });
-let vocabulary;
 
+let vocabulary;
 const keyupEvent = new Event('keyup');
 const userInputBox = document.getElementById('user-input');
 const textGenerateBox = document.getElementById('text-generation');
@@ -458,7 +459,7 @@ function speakText(text) {
       const voices = window.speechSynthesis.getVoices();
 
       if (voices.length > 0) {
-        utterance.voice = voices[10];
+        utterance.voice = voices[0];
         utterance.lang = 'en-US';
         utterance.rate = 0.85;
         utterance.pitch = 1;

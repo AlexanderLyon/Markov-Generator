@@ -1,8 +1,12 @@
-let vocabulary;
+const allData = {
+  vocabulary: {},
+  sentenceStarters: [],
+  sentenceEnders: []
+};
 
 
 function getVocabulary() {
-  return vocabulary;
+  return allData.vocabulary;
 }
 
 
@@ -11,21 +15,23 @@ function loadVocabulary() {
   .then(response => response.json())
   .then((data) => {
     if (data) {
-      vocabulary = data;
+      allData.vocabulary = data.vocabulary;
+      allData.sentenceStarters = data.sentenceStarters;
+      allData.sentenceEnders = data.sentenceEnders;
       console.log("Vocabulary loaded");
     }
     else {
-      vocabulary = {};
+      allData.vocabulary = {};
     }
   })
   .catch((err) => {
     console.warn("Unable to fetch vocabulary. The JSON file is most likely empty. \nCreating a new vocabulary object...");
-    vocabulary = {};
+    allData.vocabulary = {};
   });
 }
 
 
-function saveVocabulary(vocabulary) {
+function saveVocabulary(obj) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
     xhr.open('POST', '../utilities/saveVocabulary.php');
@@ -36,7 +42,7 @@ function saveVocabulary(vocabulary) {
         resolve();
       }
     };
-    xhr.send("data=" + encodeURIComponent(JSON.stringify(vocabulary)));
+    xhr.send("data=" + encodeURIComponent(JSON.stringify(obj)));
   });
 }
 
@@ -46,47 +52,64 @@ function train(text) {
     let tokens = cleanText(text).split(" ");
 
     for (let i=0; i<tokens.length; i++) {
+      const prevWord = (i-1 > -1) ? tokens[i-1] : null;
       const thisWord = tokens[i];
+      const nextWord = (i+1 < tokens.length) ? tokens[i+1] : null;
 
-      if (thisWord in vocabulary) {
+      if (thisWord in allData.vocabulary) {
         // Word is already in vocabulary, only add its next word:
-        if (i+1 < tokens.length) {
-          const nextWord = tokens[i+1];
-          vocabulary[thisWord].push(nextWord);
+        if (nextWord) {
+          allData.vocabulary[thisWord].push(nextWord);
         }
       }
       else {
         // Not yet in vocabulary, add it & its next word:
-        vocabulary[thisWord] = [];
+        allData.vocabulary[thisWord] = [];
         if (i+1 < tokens.length) {
-          vocabulary[thisWord].push(tokens[i+1]);
+          allData.vocabulary[thisWord].push(tokens[i+1]);
+        }
+      }
+
+      // Record sentence starters / enders:
+      if (prevWord && prevWord.charAt(prevWord.length-1).match(/[.:!?]/)) {
+        if (allData.sentenceEnders.indexOf(prevWord) === -1) {
+          allData.sentenceEnders.push(prevWord);
+        }
+        if (allData.sentenceStarters.indexOf(thisWord) === -1) {
+          allData.sentenceStarters.push(thisWord);
+        }
+      }
+      else if (i === 0) {
+        if (allData.sentenceStarters.indexOf(thisWord) === -1) {
+          allData.sentenceStarters.push(thisWord);
         }
       }
     }
 
-    for (let words in vocabulary) {
-      vocabulary[words] = sortByOccurrence(vocabulary[words]);
+    for (let words in allData.vocabulary) {
+      allData.vocabulary[words] = sortByOccurrence(allData.vocabulary[words]);
     }
     resolve();
   }).then(() => {
-    return saveVocabulary(vocabulary);
+    return saveVocabulary(allData);
   });
 }
 
 
 function cleanText(text) {
-  /* Removes HTML tags and other characters that will interfere with regexs */
+  /* Removes HTML tags and other characters from Wikipedia that will interfere with regexs */
   return text.replace(/(<([^>]+)>)/ig,"").replace(/[\s\s,\t \n,]+/g, " ").replace(/[\]*\[*\(*\)*\_*]/g, "").trim();
 }
 
 
 function generateParagraph(limit) {
-  const words = Object.keys(vocabulary);
-  const start = Math.floor(Math.random() * (words.length));
-  let paragraph = words[start];
-  let nextWord = vocabulary[paragraph][0];
-  paragraph = paragraph.charAt(0).toUpperCase() + paragraph.slice(1);
-  let capitalize = (paragraph.search(/(\.|\?|!)/g) != -1) ? true : false;
+  const words = Object.keys(allData.vocabulary);
+  const startIndex = Math.floor(Math.random() * (allData.sentenceStarters.length));
+  let firstWord = allData.sentenceStarters[startIndex];
+  let nextWord = allData.vocabulary[firstWord][0];
+  firstWord = firstWord.charAt(0).toUpperCase() + firstWord.slice(1);
+  let capitalize = (firstWord.search(/(\.|\?|!)/g) != -1) ? true : false;
+  const paragraph = [firstWord];
   let iterator = 0;
 
   while (nextWord && iterator < limit) {
@@ -97,10 +120,18 @@ function generateParagraph(limit) {
       thisWord = thisWord.charAt(0).toUpperCase() + thisWord.slice(1);
       capitalize = false;
     }
-    paragraph += " " + thisWord;
+    paragraph.push(" " + thisWord);
 
     let nextIndex;
-    const possibleNextWords = vocabulary[thisWord];
+    let possibleNextWords;
+
+    if (thisWord.charAt(thisWord.length-1).match(/[.:!?]/)) {
+      // End of sentence, start with a sentenceStarter
+      possibleNextWords = allData.sentenceStarters;
+    }
+    else {
+      possibleNextWords = allData.vocabulary[thisWord]
+    }
 
     if (typeof possibleNextWords != 'undefined' && possibleNextWords.length > 0) {
       nextIndex = Math.floor( Math.random() * (possibleNextWords.length) );
@@ -115,7 +146,7 @@ function generateParagraph(limit) {
     iterator++;
   }
 
-  return paragraph;
+  return paragraph.join('');
 }
 
 
@@ -144,11 +175,11 @@ function sortByOccurrence(word) {
 
 function predictPath(text) {
   let possibilities = {};
-  possibilities.one = vocabulary[text];
+  possibilities.one = allData.vocabulary[text];
   if (possibilities.one.length > 0) {
-    possibilities.two = vocabulary[possibilities.one[0]];
+    possibilities.two = allData.vocabulary[possibilities.one[0]];
     if (possibilities.two.length > 0) {
-      possibilities.three = vocabulary[possibilities.two[0]];
+      possibilities.three = allData.vocabulary[possibilities.two[0]];
     }
   }
 
