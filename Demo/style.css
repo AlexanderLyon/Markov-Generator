@@ -402,6 +402,10 @@ h2 { margin-bottom: 8px; }
 #text-gen-wrapper textarea {
   width: 100%;
   max-width: 100%;
+  height: 275px;
+}
+#text-gen-wrapper textarea:not(:empty) {
+  -webkit-text-fill-color: #FFFFFF;
 }
 #text-generation { opacity: 1; }
 #speak-text {
